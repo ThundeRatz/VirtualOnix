@@ -1,4 +1,3 @@
-
 /**
  * @file 
  *
@@ -6,7 +5,7 @@
  *
  *
  * @author Gabriel Kishida <gabriel.kishida@usp.br>
- * @author Henrique Matheus <>
+ * @author Henrique Matheus <henriquedamaralhdm@usp.br>
  * @author Lucas Guedes <guedeslucas@usp.br>
  * @author Vanderson Santos <vanderson.santos@thunderatz.org>
  *
@@ -15,14 +14,19 @@
 
 //******************** CALMA E PARCIMONIA *******************//
 
+//*********** Libs ***************//
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
+
 /*******PINOUT DEFINES*********/
 // it is not recommended to make changes
 
 // Constants
-#define rot90Degree  90
-#define rot150Degree 158
-#define rot180Degree 190
+#define rot90Degree  135
+#define rot150Degree 180
+#define rot180Degree 200
 #define reverseTime 120
+#define smallReverseTime 80
 
 // Velocity
 #define maxVel 255
@@ -47,7 +51,7 @@
 #define pwmR 3
 #define rightMotor1 5
 #define rightMotor2 4
- 
+
 // DIP switch
 #define DIP1 10
 #define DIP2 11
@@ -57,7 +61,7 @@
 // Robocore's line sensor
 #define lineL A0
 #define lineR A1
-#define upperLightLimit 600  //limite de 10 bits (até 1023)
+#define upperLightLimit 700  //limite de 10 bits (até 1023)
 
 
 // Jsumo's distance sensor
@@ -95,6 +99,9 @@ bool end;
 int time_ms;
 strategies_fsm_state_t State;
 strategies_fsm_state_t lastState;
+bool flagStart = false;
+int turnAngle = 0;
+int turnSide;
 /*******PUBLIC VARIABLES - END*******/
 
 /*******FUNCTIONS*******/
@@ -123,6 +130,7 @@ bool rotine_dodge();
 bool rotine_search_enemy();
 bool rotine_reverse();
 bool IsLost();
+
 /*******FUNCTIONS - END*******/
  
 void setup() {
@@ -165,17 +173,24 @@ void setup() {
   digitalWrite(LED, LOW); // LED off
   MotorL(0); // left motor stopped
   MotorR(0); // right motor stopped
+  flagStart = false;
+  State = INITIAL;
+  
   /*************INITIAL CONDITIONS - END*************/
 
   end = false;
 }
- 
+
 void loop() {
 
-  while ( (digitalRead(microST) == LOW) || end) {
-    forward(0);
+  while (digitalRead(microST) == LOW || end) {
     Serial.print("Stop running");
-    delay(5000); //COISA PRA TREINO
+    forward(0);
+  }
+  if(!flagStart) {
+    delay(5000);
+    flagStart = true; 
+    reset_timer();
   }
   
   Serial.print("Start running");
@@ -328,11 +343,17 @@ bool getDistSensorL(){
 }
 
 bool getLineSensorL(){
-  return (analogRead(lineL) >= upperLightLimit) ? true : false;
+  return (analogRead(lineL) <= upperLightLimit) ? true : false;
 }
 
 bool getLineSensorR(){
-  return (analogRead(lineR) >= upperLightLimit) ? true : false;
+  return (analogRead(lineR) <= upperLightLimit) ? true : false;
+}
+
+/** Random number generator **/
+int randomAngle(){
+  srand (time(NULL));
+  return rand() % (rot180Degree-rot90Degree) + rot90Degree;
 }
 
 /**estrategias**/
@@ -355,7 +376,13 @@ void estrategia0(){
 
 // Estrategia para testar o sensor de linha. Seguir reto ate encontrar a linha limite do dojo e para
 void estrategia1(){
-  (getLineSensorL() || getLineSensorR()) ? forward(0) : forward(maxVel); 
+  if((!getLineSensorL() && !getLineSensorR())){
+    forward(maxVel);
+  }
+  else{
+    forward(0);
+  }
+  
 }
 
 // Estrategia para testar o sensor de distancia
@@ -451,7 +478,7 @@ void estrategia5() {
       curvedMovement(safeVel, 1.0, 0.5);
       digitalWrite(LED,LOW);
     }
-  } 
+  }
 }
 
 //teste de tempo de rotação
@@ -488,10 +515,10 @@ void estrategia7(){
 }
 
 // Teste da maquina de estados
+// Nessa estrategia o robo gira em seu eixo ate encontrar o inimigo e o ataca
 void estrategia8(){
     switch(State){
       case INITIAL:
-        delay(5000); // Espera 5 seg apos o inicio
         State = SEARCH;
         break;
       case SEARCH:
@@ -525,8 +552,8 @@ void estrategia8(){
           State = SEARCH;
         }
         break;
+        
       default:
-
         break;
     }
     if (State != lastState) {
@@ -540,7 +567,6 @@ void estrategia9(){
     
     switch(State){
       case INITIAL:
-        delay(5000); // Espera 5 seg apos o inicio
         State = SEARCH;
         break;
       case SEARCH:
@@ -603,6 +629,64 @@ void estrategia9(){
 }
 **/
 
+// Nessa estrategia o robo andara pelo campo ate encontrar o inimigo e o ataca girando quando encontra a borda do dojo
+void estrategia10(){
+    switch(State){
+      case INITIAL:
+        State = SEARCH;
+        break;
+      case SEARCH:
+        forward(maxVel);
+        if(rotine_IsInLine()){
+          State = ON_LINE;
+        } else if(!IsLost()){
+          State = PURSUE;
+        }
+        break;
+      case PURSUE:
+        if(rotine_IsInLine()){
+          State = ON_LINE;
+        } else if(routine_pursue10()){
+          State = SEARCH;
+        }
+        break;
+      case ON_LINE:
+        if(rotine_IsInLine2()== DetectBoth){
+          State = REVERSE;
+          }
+        else if(rotine_IsInLine2()!= DetectBoth){
+          State = TURN;
+          }
+        break;
+      case REVERSE:
+        if(rotine_reverse10()){
+          State = TURN;
+        }
+        break;
+      case TURN:
+        if(turnSide == DetectBoth){
+          state = REVERSE;
+        }
+        else if(rotine_turn10(turnSide)){
+          State = SEARCH;
+        }
+        break;
+        
+      default:
+        break;
+    }
+    if (State != lastState) {
+      if (State == TURN) {
+        turnAngle = randomAngle();
+        turnSide = rotine_IsInLine2();
+      }
+      lastState = State;
+      reset_timer();
+    }
+}
+
+
+
 //procurar inimigo
 bool rotine_search_enemy(){
   if ( !(getDistSensorR() && getDistSensorL()) ){
@@ -621,6 +705,24 @@ bool rotine_search_enemy(){
   return true;
 }
 
+//procurar inimigo estrategia10
+bool rotine_search_enemy10(){
+  if ( !(getDistSensorR() && getDistSensorL()) ){
+      if( (getDistSensorR()) && (!getDistSensorL()) ){
+        rotate(rotateVel);
+      }
+      else if( (!getDistSensorR()) && (getDistSensorL()) ){
+        rotate(-rotateVel);
+      }
+      else{ 
+        forward(maxVel);
+      }
+      return false;
+  }
+  rotate(0);
+  return true;
+}
+
 bool rotine_turn() {
   if(get_timer() < rot180Degree) {
     rotate(rotateVel);
@@ -629,11 +731,49 @@ bool rotine_turn() {
   return true;
 }
 
+bool rotine_turn10(int side) {
+  if(get_timer() < turnAngle) {
+    if(side == DetectLeft){
+      rotate(-rotateVel);
+    }
+    else {
+      rotate(rotateVel);
+    }
+    return false;
+  }
+  return true;
+}
+
+bool routine_pursue10() {
+  if(!getDistSensorL() && getDistSensorR()) {
+    curvedMovement(maxVel,0.5,1.0);
+    return false;
+  } else if (getDistSensorL() && !getDistSensorR()) {
+    curvedMovement(maxVel,1.0,0.5);
+    return false;
+  } else if (getDistSensorL() && getDistSensorR()) {
+    forward(maxVel);
+    return false;
+  } else {
+    return true;
+  }
+}
 
 
 bool rotine_reverse() {
   if(get_timer() < reverseTime) {
     forward(-safeVel);
+    return false;
+  }
+  else {
+    forward(0);
+    return true;
+  }
+}
+
+bool rotine_reverse10() {
+  if(get_timer() < smallReverseTime) {
+    forward(-maxVel);
     return false;
   }
   else {
@@ -663,8 +803,9 @@ bool rotine_dodge(){
 bool rotine_IsInLine(){
   if (getLineSensorL() || getLineSensorR()){
     forward(0);
+    return true;
   } 
-  return (getLineSensorL() || getLineSensorR());
+  return false;
 }
 
 bool IsLost(){
@@ -692,6 +833,7 @@ bool routine_exitFromLine(){
 }
 **/
 //**************** FUNCOES EXTRAS **************//
+
 int rotine_IsInLine2(){
   if (getLineSensorL() && getLineSensorR()){
     forward(0);
@@ -703,6 +845,6 @@ int rotine_IsInLine2(){
     forward(0);
     return DetectRight;
   } else{
-    return DetectBoth;
+    return noDetection;
   }
 }
