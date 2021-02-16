@@ -1,7 +1,5 @@
 /*******PINOUT DEFINES*********/
 // it is not recommended to make changes
-// nao e recomendado que se faca alteracoes
-// no se recomienda hacer cambios
 
 //******************** CALMA E PARCIMONIA *******************//
 
@@ -14,7 +12,7 @@
 // Velocity
 #define maxVel 255
 #define safeVel 150
-#define rotateVel 40
+#define rotateVel 255
 
 // Line Detector
 #define noDetection 0
@@ -85,9 +83,9 @@ strategies_fsm_state_t lastState;
 /*******PUBLIC VARIABLES - END*******/
 
 /*******FUNCTIONS*******/
-void MotorL(int pwm); // left motor / motor esquerdo / motor izquierdo
-void MotorR(int pwm); // right motor / motor direito / motor derecho
-int readDIP(); // read DIP switch / ler chave DIP / leer el interruptor DIP
+void MotorL(int pwm); // left motor
+void MotorR(int pwm); // right motor
+int readDIP(); // read DIP switch
 bool getDistSensorL();
 bool getDistSensorR();
 bool getLineSensorL();
@@ -129,29 +127,29 @@ void setup() {
   pinMode(leftMotor2, OUTPUT);  // left motor dir.
  
  
-  // INPUTS: DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  // INPUTS: DO NOT CHANGE
   // DIP switch
-  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE 
+  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE
   
   // line sensor
-  pinMode(lineL, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(lineR, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(lineL, INPUT); // DO NOT CHANGE
+  pinMode(lineR, INPUT); // DO NOT CHANGE
  
   // distance sensor
-  pinMode(distR, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(distL, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(distR, INPUT); // DO NOT CHANGE
+  pinMode(distL, INPUT); // DO NOT CHANGE
  
   // micro-start
-  pinMode(microST, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(microST, INPUT); // DO NOT CHANGE
   /****************PINOUT CONFIG - END***************/
  
   /***************INITIAL CONDITIONS*****************/
-  digitalWrite(LED, LOW); // LED off / LED desligado / LED apagado 
-  MotorL(0); // left motor stopped / motor esquerdo parado / motor izquierdo parado 
-  MotorR(0); // right motor stopped / motor direito parado / motor derecho parado
+  digitalWrite(LED, LOW); // LED off 
+  MotorL(0); // left motor stopped
+  MotorR(0); // right motor stopped
   /*************INITIAL CONDITIONS - END*************/
 
   end = false;
@@ -203,16 +201,16 @@ void loop() {
 
 }
  
-/**LEFT MOTOR CONTROL / CONTROLE DO MOTOR ESQUERDO / CONTROL DEL MOTOR IZQUIERDO**/
-// pwm = 0 -> stopped / parado / parado
-// 0<pwm<=255 -> forward / para frente / seguir adelante
-// -255<=pwm<0 -> backward / para tras / seguir espalda
+/**LEFT MOTOR CONTROL**/
+// pwm = 0 -> stopped
+// 0<pwm<=255 -> forward
+// -255<=pwm<0 -> backward
 
 void MotorL(int pwm){
-  // leftMotor1=0 and leftMotor2=0 -> stopped / parado / parado 
-  // leftMotor1=0 and leftMotor2=1 -> moves forward / avanca / avanzar
-  // leftMotor1=1 and leftMotor2=0 -> moves back / recua / retrocede
-  // leftMotor1=1 and leftMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+  // leftMotor1=0 and leftMotor2=0 -> stopped 
+  // leftMotor1=0 and leftMotor2=1 -> moves forward
+  // leftMotor1=1 and leftMotor2=0 -> moves back
+  // leftMotor1=1 and leftMotor2=1 -> stopped (braked)
  
   if(pwm==0){
     digitalWrite(leftMotor1, HIGH);
@@ -233,15 +231,15 @@ void MotorL(int pwm){
 }
  
  
-/**RIGHT MOTOR CONTROL / CONTROLE DO MOTOR DIREITO / CONTROL DEL MOTOR DERECHO**/
-// pwm = 0 -> stopped / parado / parado
-// 0<pwm<=255 -> forward / frente / adelante
-// -255<=pwm<0 -> backward / tras / espalda
+/**RIGHT MOTOR CONTROL**/
+// pwm = 0 -> stopped
+// 0<pwm<=255 -> forward
+// -255<=pwm<0 -> backward
 void MotorR(int pwm){
-  // rightMotor1=0 and rightMotor2=0 -> stopped / parado / parado 
-  // rightMotor1=0 and rightMotor2=1 -> moves forward / avanca / avanzar
-  // rightMotor1=1 and rightMotor2=0 -> moves back / recua / retrocede
-  // rightMotor1=1 and rightMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+  // rightMotor1=0 and rightMotor2=0 -> stopped 
+  // rightMotor1=0 and rightMotor2=1 -> moves forward
+  // rightMotor1=1 and rightMotor2=0 -> moves back
+  // rightMotor1=1 and rightMotor2=1 -> stopped (braked)
 
   if(pwm==0){
     digitalWrite(rightMotor1, HIGH);
@@ -261,10 +259,8 @@ void MotorR(int pwm){
   }
 }
  
-/** read DIP switch / ler chave DIP / leer el interruptor DIP **/
+/** read DIP switch**/
 // returns a value between 0 and 15
-// retorna um valor entre 0 e 15
-// devuelve un valor entre 0 y 15
 int readDIP(){
   int n=0;
   if(digitalRead(DIP4)==HIGH){
@@ -407,7 +403,7 @@ void estrategia5() {
       lastRot = rotateVel;
       reset_timer();
     }
-   else if( getLineSensorR() && get_timer() > rot90Degree){
+    else if( getLineSensorR() && get_timer() > rot90Degree){
       lastRot = -rotateVel;
       reset_timer();
     } 

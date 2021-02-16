@@ -1,20 +1,33 @@
-/*******PINOUT DEFINES*********/
-// it is not recommended to make changes
-// nao e recomendado que se faca alteracoes
-// no se recomienda hacer cambios
+
+/**
+ * @file 
+ *
+ * @brief 
+ *
+ *
+ * @author Gabriel Kishida <gabriel.kishida@usp.br>
+ * @author Henrique Matheus <>
+ * @author Lucas Guedes <guedeslucas@usp.br>
+ * @author Vanderson Santos <vanderson.santos@thunderatz.org>
+ *
+ * @date 02/2021
+ */
 
 //******************** CALMA E PARCIMONIA *******************//
 
+/*******PINOUT DEFINES*********/
+// it is not recommended to make changes
+
 // Constants
-#define rot90Degree  70
-#define rot150Degree 116
-#define rot180Degree 140
-#define reverseTime 100
+#define rot90Degree  90
+#define rot150Degree 158
+#define rot180Degree 190
+#define reverseTime 120
 
 // Velocity
 #define maxVel 255
 #define safeVel 150
-#define rotateVel 40
+#define rotateVel 255
 
 // Line Detector
 #define noDetection 0
@@ -85,9 +98,9 @@ strategies_fsm_state_t lastState;
 /*******PUBLIC VARIABLES - END*******/
 
 /*******FUNCTIONS*******/
-void MotorL(int pwm); // left motor / motor esquerdo / motor izquierdo
-void MotorR(int pwm); // right motor / motor direito / motor derecho
-int readDIP(); // read DIP switch / ler chave DIP / leer el interruptor DIP
+void MotorL(int pwm); // left motor
+void MotorR(int pwm); // right motor
+int readDIP(); // read DIP switch
 bool getDistSensorL();
 bool getDistSensorR();
 bool getLineSensorL();
@@ -129,29 +142,29 @@ void setup() {
   pinMode(leftMotor2, OUTPUT);  // left motor dir.
  
  
-  // INPUTS: DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  // INPUTS: DO NOT CHANGE
   // DIP switch
-  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE
   
   // line sensor
-  pinMode(lineL, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(lineR, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(lineL, INPUT); // DO NOT CHANGE
+  pinMode(lineR, INPUT); // DO NOT CHANGE
  
   // distance sensor
-  pinMode(distR, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
-  pinMode(distL, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(distR, INPUT); // DO NOT CHANGE
+  pinMode(distL, INPUT); // DO NOT CHANGE
  
   // micro-start
-  pinMode(microST, INPUT); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
+  pinMode(microST, INPUT); // DO NOT CHANGE
   /****************PINOUT CONFIG - END***************/
  
   /***************INITIAL CONDITIONS*****************/
-  digitalWrite(LED, LOW); // LED off / LED desligado / LED apagado 
-  MotorL(0); // left motor stopped / motor esquerdo parado / motor izquierdo parado 
-  MotorR(0); // right motor stopped / motor direito parado / motor derecho parado
+  digitalWrite(LED, LOW); // LED off
+  MotorL(0); // left motor stopped
+  MotorR(0); // right motor stopped
   /*************INITIAL CONDITIONS - END*************/
 
   end = false;
@@ -159,8 +172,10 @@ void setup() {
  
 void loop() {
 
-  while (digitalRead(microST) == LOW || end) {
+  while ( (digitalRead(microST) == LOW) || end) {
+    forward(0);
     Serial.print("Stop running");
+    delay(5000); //COISA PRA TREINO
   }
   
   Serial.print("Start running");
@@ -204,15 +219,15 @@ void loop() {
 }
  
 /**LEFT MOTOR CONTROL / CONTROLE DO MOTOR ESQUERDO / CONTROL DEL MOTOR IZQUIERDO**/
-// pwm = 0 -> stopped / parado / parado
-// 0<pwm<=255 -> forward / para frente / seguir adelante
-// -255<=pwm<0 -> backward / para tras / seguir espalda
+// pwm = 0 -> stopped
+// 0<pwm<=255 -> forward
+// -255<=pwm<0 -> backward
 
 void MotorL(int pwm){
-  // leftMotor1=0 and leftMotor2=0 -> stopped / parado / parado 
-  // leftMotor1=0 and leftMotor2=1 -> moves forward / avanca / avanzar
-  // leftMotor1=1 and leftMotor2=0 -> moves back / recua / retrocede
-  // leftMotor1=1 and leftMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+  // leftMotor1=0 and leftMotor2=0 -> stopped
+  // leftMotor1=0 and leftMotor2=1 -> moves forward
+  // leftMotor1=1 and leftMotor2=0 -> moves back
+  // leftMotor1=1 and leftMotor2=1 -> stopped (braked)
  
   if(pwm==0){
     digitalWrite(leftMotor1, HIGH);
@@ -233,15 +248,15 @@ void MotorL(int pwm){
 }
  
  
-/**RIGHT MOTOR CONTROL / CONTROLE DO MOTOR DIREITO / CONTROL DEL MOTOR DERECHO**/
-// pwm = 0 -> stopped / parado / parado
-// 0<pwm<=255 -> forward / frente / adelante
-// -255<=pwm<0 -> backward / tras / espalda
+/**RIGHT MOTOR CONTROL**/
+// pwm = 0 -> stopped
+// 0<pwm<=255 -> forward
+// -255<=pwm<0 -> backward
 void MotorR(int pwm){
-  // rightMotor1=0 and rightMotor2=0 -> stopped / parado / parado 
-  // rightMotor1=0 and rightMotor2=1 -> moves forward / avanca / avanzar
-  // rightMotor1=1 and rightMotor2=0 -> moves back / recua / retrocede
-  // rightMotor1=1 and rightMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+  // rightMotor1=0 and rightMotor2=0 -> stopped 
+  // rightMotor1=0 and rightMotor2=1 -> moves forward
+  // rightMotor1=1 and rightMotor2=0 -> moves back
+  // rightMotor1=1 and rightMotor2=1 -> stopped (braked)
 
   if(pwm==0){
     digitalWrite(rightMotor1, HIGH);
@@ -261,7 +276,7 @@ void MotorR(int pwm){
   }
 }
  
-/** read DIP switch / ler chave DIP / leer el interruptor DIP **/
+/** read DIP switch**/
 // returns a value between 0 and 15
 // retorna um valor entre 0 e 15
 // devuelve un valor entre 0 y 15
@@ -321,18 +336,18 @@ bool getLineSensorR(){
 }
 
 /**estrategias**/
-//virar 90 graus para a direita, e depois andar reto
+//virar 90 graus para a direita, depois andar reto e virar 90 graus para esquerda
 void estrategia0(){
   int time_curve_1 = rot90Degree;
-  int time_straight = time_curve_1 + 250;
+  int time_straight = time_curve_1 + 100;
   int time_curve_2 = time_straight + rot90Degree;
 
   if (get_timer() < time_curve_1) {
-    rotate(-safeVel);
+    rotate(-rotateVel);
   } else if (get_timer() <  time_straight) {
-    forward(safeVel);
+    forward(maxVel);
   } else if (get_timer() < time_curve_2) {
-    rotate(safeVel);
+    rotate(rotateVel);
   } else {
     end = true;
   }
@@ -340,13 +355,12 @@ void estrategia0(){
 
 // Estrategia para testar o sensor de linha. Seguir reto ate encontrar a linha limite do dojo e para
 void estrategia1(){
-  (getLineSensorL() || getLineSensorR()) ? forward(0) : forward(safeVel); 
+  (getLineSensorL() || getLineSensorR()) ? forward(0) : forward(maxVel); 
 }
 
 // Estrategia para testar o sensor de distancia
 void estrategia2(){
-  MotorL(0);
-  MotorR(0);
+  forward(0);
   if(getDistSensorL() && getDistSensorR()){
     digitalWrite(LED,HIGH);
   }
@@ -372,7 +386,7 @@ void estrategia3(){
     digitalWrite(LED,HIGH);
   }
   else {
-    rotate(0);
+    rotate(rotateVel/2);
     digitalWrite(LED,LOW);
   }
 
@@ -381,20 +395,24 @@ void estrategia3(){
 // Estrategia para testar o sensor de linha. Seguir reto ate encontrar a linha limite do dojo e gira para sair da borda
 void estrategia4(){
   static int lastRot;
-  if( getLineSensorL() && get_timer() > 1000){
+  if( getLineSensorL() && get_timer() > rot90Degree){
+    forward(0);
     lastRot = rotateVel;
     reset_timer();
+    digitalWrite(LED,HIGH);
   }
-  else if( getLineSensorR() && get_timer() > 1000){
+  else if( getLineSensorR() && get_timer() > rot90Degree){
+    forward(0);
     lastRot = -rotateVel;
     reset_timer();
+    digitalWrite(LED,HIGH);
   } 
-  if(get_timer() < 1000 ){
+  if(get_timer() < rot90Degree ){
     rotate(lastRot);
   }
   else {
-    rotate(0);
     forward(maxVel);
+    digitalWrite(LED,LOW);
   }
 }
 
@@ -402,7 +420,7 @@ void estrategia4(){
 // gira 90 graus e sai.
 void estrategia5() {
   static int lastRot;
-  if (getLineSensorL() || getDistSensorR() || get_timer() < rot90Degree) {
+  if (getLineSensorL() || getLineSensorR() || get_timer() < rot90Degree) {
     if( getLineSensorL() && get_timer() > rot90Degree){
       lastRot = rotateVel;
       reset_timer();
@@ -427,10 +445,10 @@ void estrategia5() {
     else if(getDistSensorL() && getDistSensorR()){
       rotate(0);
       digitalWrite(LED,HIGH);
-      forward(safeVel);
+      forward(maxVel);
     }
     else {
-      curvedMovement(safeVel, 1.0, 0.4);
+      curvedMovement(safeVel, 1.0, 0.5);
       digitalWrite(LED,LOW);
     }
   } 
@@ -439,29 +457,26 @@ void estrategia5() {
 //teste de tempo de rotação
 void estrategia6(){
   int intervalo = 5000; //segundos entre as rotações
-  int tempo1 = 20;
-  int tempo2 = 50;
-  int tempo3 = 70;
-  int tempo4 = 100;
-  int tempo5 = 130;
-
-
-
+  int tempo1 = rot90Degree/2;
+  int tempo2 = rot90Degree;
+  int tempo3 = rot150Degree;
+  int tempo4 = rot180Degree;
+  int tempo5 = 2*rot180Degree;
 
   if(get_timer() < tempo1) {
-    rotate(safeVel);
+    rotate(rotateVel);
   }else if (get_timer() < tempo1 + intervalo) {
     rotate(0);
   }else if (get_timer() < tempo1 + tempo2 + intervalo){
-    rotate(safeVel);
+    rotate(rotateVel);
   }else if (get_timer() < tempo1 + tempo2 + 2*intervalo) {
     rotate(0);
   }else if (get_timer() < tempo1 + tempo2 + tempo3 + 2*intervalo){
-    rotate(safeVel);
+    rotate(rotateVel);
   }else if (get_timer() < tempo1 + tempo2 + tempo3 + 3*intervalo){
     rotate(0);
   }else if (get_timer() < tempo1 + tempo2 + tempo3 + tempo4 + 3*intervalo) {
-    rotate(safeVel);
+    rotate(rotateVel);
   }else {
     rotate(0);
     end = true;
@@ -587,15 +602,18 @@ void estrategia9(){
     }
 }
 **/
+
 //procurar inimigo
 bool rotine_search_enemy(){
-  if (!getDistSensorR() || !getDistSensorL()){
-      rotate(maxVel);
+  if ( !(getDistSensorR() && getDistSensorL()) ){
       if( (getDistSensorR()) && (!getDistSensorL()) ){
-        rotate(safeVel);
+        rotate(rotateVel);
       }
-      if( (!getDistSensorR()) && (getDistSensorL()) ){
-        rotate(-safeVel);
+      else if( (!getDistSensorR()) && (getDistSensorL()) ){
+        rotate(-rotateVel);
+      }
+      else{ 
+        rotate(rotateVel);
       }
       return false;
   }
@@ -605,7 +623,7 @@ bool rotine_search_enemy(){
 
 bool rotine_turn() {
   if(get_timer() < rot180Degree) {
-    rotate(safeVel);
+    rotate(rotateVel);
     return false;
   }
   return true;
@@ -631,11 +649,11 @@ bool rotine_dodge(){
   int time_curve_2 = time_straight + rot90Degree;
 
     if (get_timer() < time_curve_1) {
-      rotate(-maxVel);
+      rotate(-rotateVel);
     } else if (get_timer() <  time_straight) {
       forward(maxVel);
     } else if (get_timer() < time_curve_2) {
-      rotate(maxVel);
+      rotate(rotateVel);
     } else {
       return true;
     }
