@@ -123,7 +123,8 @@ void estrategia5();
 void estrategia6();
 void estrategia7();
 void estrategia8();
-
+void estrategia9();
+void estrategia10();
 
 bool rotine_IsInLine();
 bool rotine_dodge();
@@ -175,6 +176,7 @@ void setup() {
   MotorR(0); // right motor stopped
   flagStart = false;
   State = INITIAL;
+  lastState = INITIAL;
   
   /*************INITIAL CONDITIONS - END*************/
 
@@ -188,7 +190,6 @@ void loop() {
     forward(0);
   }
   if(!flagStart) {
-    delay(5000);
     flagStart = true; 
     reset_timer();
   }
@@ -224,11 +225,17 @@ void loop() {
       break;
     case 7:
       estrategia7();
+      break;
     case 8:
       estrategia8();
+      break;
+    case 10:
+      estrategia10();
+      break;
       // aqui a gente coloca mais estrategias conforme formos desenvolvendo
     default:
-      estrategia0();
+      estrategia8();
+      break;
   }
 
 }
@@ -516,50 +523,51 @@ void estrategia7(){
 
 // Teste da maquina de estados
 // Nessa estrategia o robo gira em seu eixo ate encontrar o inimigo e o ataca
-void estrategia8(){
-    switch(State){
-      case INITIAL:
-        State = SEARCH;
-        break;
-      case SEARCH:
-        if(rotine_IsInLine()){
-          State = ON_LINE;
-        } else if(rotine_search_enemy()){
-          State = PURSUE;
-        }
-        break;
-      case PURSUE:
-        forward(maxVel);
-        if(rotine_IsInLine()){
-          State = ON_LINE;
-        } else if(IsLost()){
-          State = SEARCH;
-        }
-        break;
-      case ON_LINE:
-        State = REVERSE;
-        break;
-      case REVERSE:
-        if(rotine_reverse()){
-          State = TURN;
-        }
-        break;
 
-      case TURN:
-        if (rotine_IsInLine()){
-          State = ON_LINE;
-        } else if (rotine_turn()){
-          State = SEARCH;
-        }
-        break;
+void estrategia8(){
+  switch(State){
+    case INITIAL:
+      State = SEARCH;
+      break;
+    case SEARCH:
+      if(rotine_IsInLine()){
+        State = ON_LINE;
+      } else if(rotine_search_enemy()){
+        State = PURSUE;
+      }
+      break;
+    case PURSUE:
+      forward(maxVel);
+      if(rotine_IsInLine()){
+        State = ON_LINE;
+      } else if(IsLost()){
+        State = SEARCH;
+      }
+      break;
+    case ON_LINE:
+      State = REVERSE;
+      break;
+    case REVERSE:
+      if(rotine_reverse()){
+        State = TURN;
+      }
+      break;
+
+    case TURN:
+      if (rotine_IsInLine()){
+        State = ON_LINE;
+      } else if (rotine_turn()){
+        State = SEARCH;
+      }
+      break;
         
-      default:
-        break;
-    }
-    if (State != lastState) {
-      reset_timer();
-      lastState = State;
-    }
+    default:
+      break;
+  }
+  if (State != lastState) {
+    reset_timer();
+    lastState = State;
+  }
 }
 
 /**
@@ -651,11 +659,11 @@ void estrategia10(){
         }
         break;
       case ON_LINE:
-        if(rotine_IsInLine2()== DetectBoth){
-          State = REVERSE;
-          }
-        else if(rotine_IsInLine2()!= DetectBoth){
+        if(rotine_IsInLine2()!= DetectBoth){
           State = TURN;
+          }
+        else{
+          State = REVERSE;
           }
         break;
       case REVERSE:
@@ -665,7 +673,7 @@ void estrategia10(){
         break;
       case TURN:
         if(turnSide == DetectBoth){
-          state = REVERSE;
+          State = REVERSE;
         }
         else if(rotine_turn10(turnSide)){
           State = SEARCH;
@@ -687,14 +695,17 @@ void estrategia10(){
 
 
 
-//procurar inimigo
+// procurar inimigo
+// Caso veja o inimigo com os dois sensores, ele retorna true
+// Caso veja o inimigo com um dos sensores ele gira pra essa direcao
+// Caso nao veja o robo ele gira pra esquerda
 bool rotine_search_enemy(){
   if ( !(getDistSensorR() && getDistSensorL()) ){
       if( (getDistSensorR()) && (!getDistSensorL()) ){
-        rotate(rotateVel);
+        rotate(-rotateVel);
       }
       else if( (!getDistSensorR()) && (getDistSensorL()) ){
-        rotate(-rotateVel);
+        rotate(rotateVel);
       }
       else{ 
         rotate(rotateVel);
@@ -705,14 +716,17 @@ bool rotine_search_enemy(){
   return true;
 }
 
-//procurar inimigo estrategia10
+//procurar inimigo para a estrategia 10
+// Caso veja o inimigo com os dois sensores, ele retorna true
+// Caso veja o inimigo com um dos sensores ele gira pra essa direcao
+// Caso nao veja o robo ele segue reto
 bool rotine_search_enemy10(){
   if ( !(getDistSensorR() && getDistSensorL()) ){
       if( (getDistSensorR()) && (!getDistSensorL()) ){
-        rotate(rotateVel);
+        rotate(-rotateVel);
       }
       else if( (!getDistSensorR()) && (getDistSensorL()) ){
-        rotate(-rotateVel);
+        rotate(rotateVel);
       }
       else{ 
         forward(maxVel);
@@ -723,6 +737,9 @@ bool rotine_search_enemy10(){
   return true;
 }
 
+// Gira o robo 180 graus para a esquerda
+// O robo gira pra esquerda durante "rot180Degree" ms
+// Ao terminar o giro a funcao retorna true
 bool rotine_turn() {
   if(get_timer() < rot180Degree) {
     rotate(rotateVel);
@@ -731,6 +748,9 @@ bool rotine_turn() {
   return true;
 }
 
+// Gira o robo 180 graus para a esquerda (Estrategia 10)
+// O robo gira pra o lado selecionado (side) durante "turnAngle" ms
+// Ao terminar o giro a funcao retorna true
 bool rotine_turn10(int side) {
   if(get_timer() < turnAngle) {
     if(side == DetectLeft){
@@ -744,6 +764,10 @@ bool rotine_turn10(int side) {
   return true;
 }
 
+// Rotina de perseguicao do oponente (Estrategia 10)
+// Caso veja o inimigo com os dois sensores, ele segue reto
+// Caso veja o inimigo com um dos sensores ele faz uma curva pra essa direcao
+// Caso nao veja o robo ele retorna true
 bool routine_pursue10() {
   if(!getDistSensorL() && getDistSensorR()) {
     curvedMovement(maxVel,0.5,1.0);
@@ -759,7 +783,9 @@ bool routine_pursue10() {
   }
 }
 
-
+// Robo anda de re
+// O robo retorna durante "reverseTime" ms na safeVel
+// Ao terminar o retorno a funcao retorna true
 bool rotine_reverse() {
   if(get_timer() < reverseTime) {
     forward(-safeVel);
@@ -771,6 +797,9 @@ bool rotine_reverse() {
   }
 }
 
+// Robo anda de re
+// O robo retorna durante "reverseTime" ms na maxVel
+// Ao terminar o retorno a funcao retorna true
 bool rotine_reverse10() {
   if(get_timer() < smallReverseTime) {
     forward(-maxVel);
@@ -782,24 +811,9 @@ bool rotine_reverse10() {
   }
 }
 
-
-bool rotine_dodge(){
-  int time_curve_1 = rot90Degree;
-  int time_straight = time_curve_1 + 250;
-  int time_curve_2 = time_straight + rot90Degree;
-
-    if (get_timer() < time_curve_1) {
-      rotate(-rotateVel);
-    } else if (get_timer() <  time_straight) {
-      forward(maxVel);
-    } else if (get_timer() < time_curve_2) {
-      rotate(rotateVel);
-    } else {
-      return true;
-    }
-    return false;
-}
-
+// Detecta se o robo esta sobre as linhas laterais do robo
+// Caso algum sensor detecte a linha, o robo para e a funcao retorna true
+// Se nenhum sensor detectar a linha, retorna false
 bool rotine_IsInLine(){
   if (getLineSensorL() || getLineSensorR()){
     forward(0);
@@ -808,6 +822,9 @@ bool rotine_IsInLine(){
   return false;
 }
 
+// Detecta se o robo perdeu o inimigo de vista
+// Caso algum sensor detecte o oponente, a funcao retorna false
+// Se nenhum sensor detectar o oponente, retorna true
 bool IsLost(){
   return !(getDistSensorL() || getDistSensorR());
 }
@@ -847,4 +864,21 @@ int rotine_IsInLine2(){
   } else{
     return noDetection;
   }
+}
+
+bool rotine_dodge(){
+  int time_curve_1 = rot90Degree;
+  int time_straight = time_curve_1 + 250;
+  int time_curve_2 = time_straight + rot90Degree;
+
+    if (get_timer() < time_curve_1) {
+      rotate(-rotateVel);
+    } else if (get_timer() <  time_straight) {
+      forward(maxVel);
+    } else if (get_timer() < time_curve_2) {
+      rotate(rotateVel);
+    } else {
+      return true;
+    }
+    return false;
 }
