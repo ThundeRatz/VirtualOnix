@@ -40,7 +40,7 @@
 #define DetectBoth  3
  
 // LED
-#define LED 6
+#define LED 6 //
  
 // left motor
 #define pwmL 9
@@ -53,10 +53,10 @@
 #define rightMotor2 4
 
 // DIP switch
-#define DIP1 10
-#define DIP2 11
-#define DIP3 12
-#define DIP4 13
+#define DIP1 10 //
+#define DIP2 11 // 
+#define DIP3 12 //
+#define DIP4 13 //
  
 // Robocore's line sensor
 #define lineL A0
