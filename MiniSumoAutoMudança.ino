@@ -78,7 +78,7 @@
 /******* ENUM DEFINES *********/
 
 // States
-typedef enum strategies_fsm_state {
+/*typedef enum strategies_fsm_state {
     INITIAL,
     SEARCH,
     PURSUE,
@@ -88,7 +88,7 @@ typedef enum strategies_fsm_state {
     ON_LINE,
     REVERSE,
     TURN,
-} strategies_fsm_state_t;
+} strategies_fsm_state_t;*/
 
 /*******PINOUT DEFINES - END*********/
 
@@ -97,8 +97,8 @@ typedef enum strategies_fsm_state {
 
 bool end;
 int time_ms;
-strategies_fsm_state_t State;
-strategies_fsm_state_t lastState;
+/*strategies_fsm_state_t State;
+strategies_fsm_state_t lastState;*/
 bool flagStart = false;
 int turnAngle = 0;
 int turnSide;
@@ -527,7 +527,7 @@ void estrategia7(){
 
 // Teste da maquina de estados
 // Nessa estrategia o robo gira em seu eixo ate encontrar o inimigo e o ataca
-
+/*
 void estrategia8(){
   switch(State){
     case INITIAL:
@@ -572,7 +572,7 @@ void estrategia8(){
     reset_timer();
     lastState = State;
   }
-}
+}*/
 
 /**
 void estrategia9(){
@@ -640,7 +640,7 @@ void estrategia9(){
     }
 }
 **/
-
+/*
 // Nessa estrategia o robo andara pelo campo ate encontrar o inimigo e o ataca girando quando encontra a borda do dojo
 void estrategia10(){
     switch(State){
@@ -695,7 +695,7 @@ void estrategia10(){
       lastState = State;
       reset_timer();
     }
-}
+}*/
 
 
 
