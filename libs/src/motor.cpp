@@ -16,6 +16,24 @@
 
 //construtor dos motor
 motor::motor(){
+    
+    /****************PINOUT CONFIG****************/
+  // right motor
+  pinMode(pwmR, OUTPUT);        // right motor power
+  pinMode(rightMotor1, OUTPUT); // right motor dir.
+  pinMode(rightMotor2, OUTPUT); // right motor dir.
+ 
+  // left motor
+  pinMode(pwmL, OUTPUT);        // left motor power
+  pinMode(leftMotor1, OUTPUT);  // left motor dir.
+  pinMode(leftMotor2, OUTPUT);  // left motor dir.
+  
+  /****************PINOUT CONFIG - END***************/
+
+  /***************INITIAL CONDITIONS*****************/
+  MotorL(0); // left motor stopped
+  MotorR(0); // right motor stopped
+  /*************INITIAL CONDITIONS - END*************/
 
 }
 
@@ -99,24 +117,4 @@ void motor::rotate(int pwm){
   MotorL(-pwm);
 }
 
-//setup dos motor
-void motor::setup_motors(){
-  /****************PINOUT CONFIG****************/
-  // right motor
-  pinMode(pwmR, OUTPUT);        // right motor power
-  pinMode(rightMotor1, OUTPUT); // right motor dir.
-  pinMode(rightMotor2, OUTPUT); // right motor dir.
- 
-  // left motor
-  pinMode(pwmL, OUTPUT);        // left motor power
-  pinMode(leftMotor1, OUTPUT);  // left motor dir.
-  pinMode(leftMotor2, OUTPUT);  // left motor dir.
-  
-  /****************PINOUT CONFIG - END***************/
-
-  /***************INITIAL CONDITIONS*****************/
-  MotorL(0); // left motor stopped
-  MotorR(0); // right motor stopped
-  /*************INITIAL CONDITIONS - END*************/
-}
 

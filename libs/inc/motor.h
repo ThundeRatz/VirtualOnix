@@ -48,7 +48,6 @@ class motor{
     void MotorR(int pwm);
     void MotorL(int pwm);
     void forward(int pwm);
-    void setup_motors();
 }
 
 #endif
