@@ -44,7 +44,6 @@ class coadjuvante {
     ~coadjuvante(); 
     int readDPI();
     int random_angle();
-    void setup_coadj();
     
 }
 
