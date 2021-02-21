@@ -19,10 +19,9 @@
 #include <routine.h>
 #include <coadjuvante.h>
 
-class strategy {
-  Strategy(); 
-  
+class Strategy {
   public:
+    Strategy(); 
     typedef enum strategies_fsm_state {
       INITIAL,
       SEARCH,
@@ -46,11 +45,5 @@ class strategy {
     coadjuvante* coadjuvante_p;
  
 }
-
-//PUBLIC FUNCTIONS
-
-Strategy(){
-};
-
 
 #endif'

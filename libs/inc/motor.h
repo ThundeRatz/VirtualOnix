@@ -38,10 +38,10 @@
 #define reverseTime 120
 #define smallReverseTime 80
 
-class motor{
+class Motor{
   public:
-    motor();
-    ~motor();
+    Motor();
+    ~Motor();
 
     void rotate(int pwm);
     void curvedMovement();
