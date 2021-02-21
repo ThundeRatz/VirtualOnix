@@ -5,7 +5,7 @@
 // Teste da maquina de estados
 // Nessa estrategia o robo gira em seu eixo ate encontrar o inimigo e o ataca
 
-void nodeStrategy::bayblade(){
+void strategy::bayblade(){
   switch(State){
     case INITIAL:
       State = SEARCH;
@@ -53,7 +53,7 @@ void nodeStrategy::bayblade(){
 
 
 // Nessa estrategia o robo andara pelo campo ate encontrar o inimigo e o ataca girando quando encontra a borda do dojo
-void nodeStrategy::flash_gordo(){
+void strategy::flash_gordo(){
     switch(State){
       case INITIAL:
         State = SEARCH;

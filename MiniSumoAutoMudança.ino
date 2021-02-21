@@ -22,16 +22,16 @@
 // it is not recommended to make changes
 
 // Constants
-#define rot90Degree  135
-#define rot150Degree 180
-#define rot180Degree 200
-#define reverseTime 120
-#define smallReverseTime 80
+//#define rot90Degree  135 //
+//#define rot150Degree 180 //
+//#define rot180Degree 200 //
+//#define reverseTime 120 //
+//#define smallReverseTime 80 //
 
-// Velocity
-#define maxVel 255
-#define safeVel 150
-#define rotateVel 255
+// Velocity//
+//#define maxVel 255//
+//#define safeVel 150//
+//#define rotateVel 255//
 
 // Line Detector
 #define noDetection 0
@@ -43,14 +43,14 @@
 #define LED 6 //
  
 // left motor
-#define pwmL 9
-#define leftMotor1 7
-#define leftMotor2 8
+//#define pwmL 9//
+//#define leftMotor1 7//
+//#define leftMotor2 8//
  
 // right motor
-#define pwmR 3
-#define rightMotor1 5
-#define rightMotor2 4
+//#define pwmR 3//
+//#define rightMotor1 5//
+//#define rightMotor2 4//
 
 // DIP switch
 #define DIP1 10 //
@@ -59,17 +59,17 @@
 #define DIP4 13 //
  
 // Robocore's line sensor
-#define lineL A0
-#define lineR A1
-#define upperLightLimit 700  //limite de 10 bits (até 1023)
+//#define lineL A0
+//#define lineR A1
+//#define upperLightLimit 700  //limite de 10 bits (até 1023)
 
 
 // Jsumo's distance sensor
-#define distL A2
-#define distR A3
+//#define distL A2
+//#define distR A3
  
 // Jsumo's micro-start
-#define microST 2
+//#define microST 2
 
 //timer
 #define reset_timer() (time_ms = millis())
@@ -100,13 +100,13 @@ int time_ms;
 /*strategies_fsm_state_t State;
 strategies_fsm_state_t lastState;*/
 bool flagStart = false;
-int turnAngle = 0;
+int turnAngle = 0;//
 int turnSide;
 /*******PUBLIC VARIABLES - END*******/
 
 /*******FUNCTIONS*******/
-void MotorL(int pwm); // left motor
-void MotorR(int pwm); // right motor
+void MotorL(int pwm); // left motor//
+void MotorR(int pwm); // right motor//
 int readDIP(); // read DIP switch
 bool getDistSensorL();
 bool getDistSensorR();
@@ -136,30 +136,30 @@ bool IsLost();
  
 void setup() {
   
-  srand (time(NULL)); // setting random seed
+  srand (time(NULL)); // setting random seed//
 
 
   /****************PINOUT CONFIG****************/
   // OUTPUTS
-  pinMode(LED, OUTPUT);         // led
+  pinMode(LED, OUTPUT);         // led//
  
   // right motor
-  pinMode(pwmR, OUTPUT);        // right motor power
-  pinMode(rightMotor1, OUTPUT); // right motor dir.
-  pinMode(rightMotor2, OUTPUT); // right motor dir.
+  //pinMode(pwmR, OUTPUT);        // right motor power//
+  //pinMode(rightMotor1, OUTPUT); // right motor dir.//
+  //pinMode(rightMotor2, OUTPUT); // right motor dir.//
  
   // left motor
-  pinMode(pwmL, OUTPUT);        // left motor power
-  pinMode(leftMotor1, OUTPUT);  // left motor dir.
-  pinMode(leftMotor2, OUTPUT);  // left motor dir.
+  //pinMode(pwmL, OUTPUT);        // left motor power//
+  //pinMode(leftMotor1, OUTPUT);  // left motor dir.//
+  //pinMode(leftMotor2, OUTPUT);  // left motor dir.//
  
  
   // INPUTS: DO NOT CHANGE
-  // DIP switch
-  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE
+  // DIP switch//
+  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE//
+  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE//
+  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE//
+  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE//
   
   // line sensor
   pinMode(lineL, INPUT); // DO NOT CHANGE
@@ -175,8 +175,8 @@ void setup() {
  
   /***************INITIAL CONDITIONS*****************/
   digitalWrite(LED, LOW); // LED off
-  MotorL(0); // left motor stopped
-  MotorR(0); // right motor stopped
+  //MotorL(0); // left motor stopped//
+  //MotorR(0); // right motor stopped//
   flagStart = false;
   State = INITIAL;
   lastState = INITIAL;
@@ -243,105 +243,103 @@ void loop() {
 
 }
  
-/**LEFT MOTOR CONTROL / CONTROLE DO MOTOR ESQUERDO / CONTROL DEL MOTOR IZQUIERDO**/
-// pwm = 0 -> stopped
-// 0<pwm<=255 -> forward
-// -255<=pwm<0 -> backward
+/**LEFT MOTOR CONTROL / CONTROLE DO MOTOR ESQUERDO / CONTROL DEL MOTOR IZQUIERDO**///
+// pwm = 0 -> stopped//
+// 0<pwm<=255 -> forward//
+// -255<=pwm<0 -> backward//
 
-void MotorL(int pwm){
-  // leftMotor1=0 and leftMotor2=0 -> stopped
-  // leftMotor1=0 and leftMotor2=1 -> moves forward
-  // leftMotor1=1 and leftMotor2=0 -> moves back
-  // leftMotor1=1 and leftMotor2=1 -> stopped (braked)
+//void MotorL(int pwm){//
+  // leftMotor1=0 and leftMotor2=0 -> stopped//
+  // leftMotor1=0 and leftMotor2=1 -> moves forward//
+  // leftMotor1=1 and leftMotor2=0 -> moves back//
+  // leftMotor1=1 and leftMotor2=1 -> stopped (braked)//
  
-  if(pwm==0){
-    digitalWrite(leftMotor1, HIGH);
-    digitalWrite(leftMotor2, HIGH);
-  }
-  else if(pwm<0)
-  {
-    analogWrite(pwmL, -pwm);
-    digitalWrite(leftMotor1, HIGH);
-    digitalWrite(leftMotor2, LOW);
-  }
-  else
-  {
-    analogWrite(pwmL, pwm);
-    digitalWrite(leftMotor1, LOW);
-    digitalWrite(leftMotor2, HIGH);
-  }
-}
+  if(pwm==0){//
+    digitalWrite(leftMotor1, HIGH);//
+    digitalWrite(leftMotor2, HIGH);//
+  }//
+  else if(pwm<0)//
+  {//
+    analogWrite(pwmL, -pwm);//
+    digitalWrite(leftMotor1, HIGH);//
+    digitalWrite(leftMotor2, LOW);//
+  }//
+  else//
+  {//
+    analogWrite(pwmL, pwm);//
+    digitalWrite(leftMotor1, LOW);//
+    digitalWrite(leftMotor2, HIGH);//
+  }//
+}//
  
  
-/**RIGHT MOTOR CONTROL**/
-// pwm = 0 -> stopped
-// 0<pwm<=255 -> forward
-// -255<=pwm<0 -> backward
-void MotorR(int pwm){
-  // rightMotor1=0 and rightMotor2=0 -> stopped 
-  // rightMotor1=0 and rightMotor2=1 -> moves forward
-  // rightMotor1=1 and rightMotor2=0 -> moves back
-  // rightMotor1=1 and rightMotor2=1 -> stopped (braked)
+/**RIGHT MOTOR CONTROL**/ //
+// pwm = 0 -> stopped//
+// 0<pwm<=255 -> forward//
+// -255<=pwm<0 -> backward//
+void MotorR(int pwm){//
+  // rightMotor1=0 and rightMotor2=0 -> stopped //
+  // rightMotor1=0 and rightMotor2=1 -> moves forward //
+  // rightMotor1=1 and rightMotor2=0 -> moves back //
+  // rightMotor1=1 and rightMotor2=1 -> stopped (braked) //
 
-  if(pwm==0){
-    digitalWrite(rightMotor1, HIGH);
-    digitalWrite(rightMotor2, HIGH);
-  }
-  else if(pwm<0)
-  {
-    analogWrite(pwmR, -pwm);
-    digitalWrite(rightMotor1, HIGH);
-    digitalWrite(rightMotor2, LOW);
-  }
-  else
-  {
-    analogWrite(pwmR, pwm);
-    digitalWrite(rightMotor1, LOW);
-    digitalWrite(rightMotor2, HIGH);
-  }
-}
+  if(pwm==0){//
+    digitalWrite(rightMotor1, HIGH);//
+    digitalWrite(rightMotor2, HIGH);//
+  }//
+  else if(pwm<0)//
+  {//
+    analogWrite(pwmR, -pwm);//
+    digitalWrite(rightMotor1, HIGH);//
+    digitalWrite(rightMotor2, LOW);//
+  }//
+  else//
+  {//
+    analogWrite(pwmR, pwm);//
+    digitalWrite(rightMotor1, LOW);//
+    digitalWrite(rightMotor2, HIGH);//
+  }//
+} //
  
-/** read DIP switch**/
-// returns a value between 0 and 15
-// retorna um valor entre 0 e 15
-// devuelve un valor entre 0 y 15
-int readDIP(){
-  int n=0;
-  if(digitalRead(DIP4)==HIGH){
-    n=1;}
-  if(digitalRead(DIP3)==HIGH){
-    n|= (1<<1);}
-  if(digitalRead(DIP2)==HIGH){
-    n|= (1<<2);}
-  if(digitalRead(DIP1)==HIGH){
-    n|= (1<<3);}
-  return n;
-}
+/** read DIP switch**/ //
+// returns a value between 0 and 15//
+// retorna um valor entre 0 e 15//
+// devuelve un valor entre 0 y 15//
+int readDIP(){//
+  int n=0;//
+  if(digitalRead(DIP4)==HIGH){//
+    n=1;}//
+  if(digitalRead(DIP3)==HIGH){//
+    n|= (1<<1);}//
+  if(digitalRead(DIP2)==HIGH){//
+    n|= (1<<2);}//
+  if(digitalRead(DIP1)==HIGH){//
+    n|= (1<<3);}//
+  return n;//
+}//
 
-/** Controle dos motores **/
-// Para valores positivos de "pwm", o robô rotaciona para a esquerda, Para negativos,
-// ele rotaciona para a direita.
-void rotate(int pwm){
-  MotorR(pwm);
-  MotorL(-pwm);
-}
+/** Controle dos motores **/ //
+// Para valores positivos de "pwm", o robô rotaciona para a esquerda, Para negativos,//
+// ele rotaciona para a direita.//
+void rotate(int pwm){//
+  MotorR(pwm);//
+  MotorL(-pwm);//
+}//
 
 // pwm define a potência dos motores, ratioR define quanto dessa potência será transmitida
 // para a roda da direita, e ratioL define quanto será transmitido para a roda da esquerda,
 // fazendo assim um movimento curvilíneo.
-void curvedMovement(int pwm, float ratioR, float ratioL){
-  int rightMovement = int(float(pwm)*ratioR);
-  int leftMovement = int(float(pwm)*ratioL);
-  MotorR(rightMovement);
-  MotorL(leftMovement);
+void curvedMovement(int pwm, float ratioR, float ratioL){//
+  MotorR( int(float(pwm)*ratioR) );//
+  MotorL( int(float(pwm)*ratioL) );//
 }
 
-// Para valores positivos do "pwm", o robo seguira pra frente,
-// Para valores negativos, o robo seguira de re
-void forward(int pwm){
-  MotorR(pwm);
-  MotorL(pwm);
-}
+// Para valores positivos do "pwm", o robo seguira pra frente,//
+// Para valores negativos, o robo seguira de re//
+void forward(int pwm){//
+  MotorR(pwm);//
+  MotorL(pwm);//
+}//
 
 /** getters dos sensores **/
 bool getDistSensorR(){
@@ -352,18 +350,18 @@ bool getDistSensorL(){
   return (digitalRead(distL) == HIGH) ? true : false;
 }
 
-bool getLineSensorL(){
-  return (analogRead(lineL) <= upperLightLimit) ? true : false;
-}
+//bool getLineSensorL(){
+//  return (analogRead(lineL) <= upperLightLimit) ? true : false;
+//}
 
-bool getLineSensorR(){
-  return (analogRead(lineR) <= upperLightLimit) ? true : false;
-}
+//bool getLineSensorR(){
+//  return (analogRead(lineR) <= upperLightLimit) ? true : false;
+//}
 
 /** Random number generator **/
-int randomAngle(){
-  return rand() % (rot180Degree-rot90Degree) + rot90Degree;
-}
+int randomAngle(){ //
+  return rand() % (rot180Degree-rot90Degree) + rot90Degree;//
+}//
 
 /**estrategias**/
 //virar 90 graus para a direita, depois andar reto e virar 90 graus para esquerda
