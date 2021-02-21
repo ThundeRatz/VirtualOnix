@@ -35,15 +35,15 @@ Routine::Routine() {
 }
 
 bool Routine::search_enemy_forward() {
-    if ( !(sensor->getDistSensorR() && sensor->getDistSensorL()) ) {
-        if( (sensor->getDistSensorR()) && (!sensor->getDistSensorL()) ) {
-            motor->rotate(-rotateVel);
+    if ( !(sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) ) {
+        if( (sensor_p->getDistSensorR()) && (!sensor_p->getDistSensorL()) ) {
+            motor_p->rotate(-rotateVel);
         }
-        else if( (!sensor->getDistSensorR()) && (sensor->getDistSensorL()) ){
-            motor->rotate(rotateVel);
+        else if( (!sensor_p->getDistSensorR()) && (sensor_p->getDistSensorL()) ){
+            motor_p->rotate(rotateVel);
         }
         else { 
-            motor->forward(maxVel);
+            motor_p->forward(maxVel);
         }
         return false;
     }
@@ -52,25 +52,25 @@ bool Routine::search_enemy_forward() {
 }
 
 bool Routine::search_enemy_spin() {
-    if ( !(sensor->getDistSensorR() && sensor->getDistSensorL()) ) {
-        if( (sensor->getDistSensorR()) && (!sensor->getDistSensorL()) ) {
-            motor->rotate(-rotateVel);
+    if ( !(sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) ) {
+        if( (sensor_p->getDistSensorR()) && (!sensor_p->getDistSensorL()) ) {
+            motor_p->rotate(-rotateVel);
         }
-        else if( (!sensor->getDistSensorR()) && (sensor->getDistSensorL()) ) {
-            motor->rotate(rotateVel);
+        else if( (!sensor_p->getDistSensorR()) && (sensor_p->getDistSensorL()) ) {
+            motor_p->rotate(rotateVel);
         }
         else { 
-            motor->rotate(rotateVel);
+            motor_p->rotate(rotateVel);
         }
         return false;
     }
-    motor->rotate(0);
+    motor_p->rotate(0);
     return true;
 }
 
 bool Routine::turn_left(int angle_time, int rot_vel) {
     if(get_timer() < time) {
-        motor->rotate(rot_vel);
+        motor_p->rotate(rot_vel);
         return false;
     }
     return true;
@@ -78,21 +78,21 @@ bool Routine::turn_left(int angle_time, int rot_vel) {
 
 bool Routine::turn_right(int angle_time, int rot_vel) {
     if(get_timer() < time) {
-        motor->rotate(-rot_vel);
+        motor_p->rotate(-rot_vel);
         return false;
     }
     return true;
 }
 
 bool Routine::pursue() {
-    if(!sensor->getDistSensorL() && sensor->getDistSensorR()) {
-        motor->curvedMovement(maxVel,0->5,1->0);
+    if(!sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
+        motor_p->curvedMovement(maxVel,0.5,1.0);
         return false;
-    } else if (sensor->getDistSensorL() && !sensor->getDistSensorR()) {
-        motor->curvedMovement(maxVel,1->0,0->5);
+    } else if (sensor_p->getDistSensorL() && !sensor_p->getDistSensorR()) {
+        motor_p->curvedMovement(maxVel,1.0,0.5);
         return false;
-    } else if (sensor->getDistSensorL() && sensor->getDistSensorR()) {
-        motor->forward(maxVel);
+    } else if (sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
+        motor_p->forward(maxVel);
         return false;
     } else {
         return true;
@@ -102,10 +102,10 @@ bool Routine::pursue() {
 bool Routine::turn_random_angle(int side) {
     if(get_timer() < turnAngle) {
         if(side == DetectLeft) {
-            motor->rotate(-rotateVel);
+            motor_p->rotate(-rotateVel);
         }
         else {
-            motor->rotate(rotateVel);
+            motor_p->rotate(rotateVel);
         }
         return false;
     }
@@ -114,11 +114,11 @@ bool Routine::turn_random_angle(int side) {
 
 bool Routine::reverse(int time, int vel) {
     if(get_timer() < time) {
-        motor->forward(-vel);
+        motor_p->forward(-vel);
         return false;
     }
     else {
-        motor->forward(0);
+        motor_p->forward(0);
         return true;
     }
 }
@@ -128,15 +128,15 @@ bool Routine::exit_from_line(int reverse_time, int turn_time) {
 }
 
 bool Routine::dodge() {
-    if(sensor->getDistSensorR() || sensor->getDistSensorL()) {
-        if(sensor->getDistSensorR() && !sensor->getDistSensorL()) {
-            motor->curvedMovement(maxVel,0->3,1->0);
+    if(sensor_p->getDistSensorR() || sensor_p->getDistSensorL()) {
+        if(sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
+            motor_p->curvedMovement(maxVel,0->3,1->0);
         }
-        else if(!sensor->getDistSensorR() && sensor->getDistSensorL()) {
-            motor->curvedMovement(maxVel,1->0,0->3);
+        else if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) {
+            motor_p->curvedMovement(maxVel,1->0,0->3);
         }
         else {
-            motor->forward(maxVel);
+            motor_p->forward(maxVel);
         }
         return false;
     } else {
@@ -145,16 +145,16 @@ bool Routine::dodge() {
 }
 
 bool Routine::stop_in_line() {
-    if(sensor->isInLine_dumy()) {
-        motor->forward(0);
+    if(sensor_p->isInLine_dumy()) {
+        motor_p->forward(0);
         return true;
     }
     return false;
 }
 
 bool Routine::setup_routine() {
-    sensor->setup_sensor();
-    motor->setup_motor();
+    sensor_p->setup_sensor();
+    motor_p->setup_motor();
     coadjuvante->setup_coad();
 
 }
