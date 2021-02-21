@@ -1,5 +1,5 @@
  /**
- * @file  routines.h
+ * @file  routines->h
  *
  * @brief Source file for the routines executed by the robot during each strategy
  *
@@ -30,19 +30,20 @@
     Class Constructer (como vamos usar isso?)
 */
 Routine::Routine() {
-
+    motor_p = new motor());
+    sensor_p = new sensor();
 }
 
 bool Routine::search_enemy_forward() {
-    if ( !(sensor.getDistSensorR() && sensor.getDistSensorL()) ) {
-        if( (sensor.getDistSensorR()) && (!sensor.getDistSensorL()) ) {
-            motor.rotate(-rotateVel);
+    if ( !(sensor->getDistSensorR() && sensor->getDistSensorL()) ) {
+        if( (sensor->getDistSensorR()) && (!sensor->getDistSensorL()) ) {
+            motor->rotate(-rotateVel);
         }
-        else if( (!sensor.getDistSensorR()) && (sensor.getDistSensorL()) ){
-            motor.rotate(rotateVel);
+        else if( (!sensor->getDistSensorR()) && (sensor->getDistSensorL()) ){
+            motor->rotate(rotateVel);
         }
         else { 
-            motor.forward(maxVel);
+            motor->forward(maxVel);
         }
         return false;
     }
@@ -51,25 +52,25 @@ bool Routine::search_enemy_forward() {
 }
 
 bool Routine::search_enemy_spin() {
-    if ( !(sensor.getDistSensorR() && sensor.getDistSensorL()) ) {
-        if( (sensor.getDistSensorR()) && (!sensor.getDistSensorL()) ) {
-            motor.rotate(-rotateVel);
+    if ( !(sensor->getDistSensorR() && sensor->getDistSensorL()) ) {
+        if( (sensor->getDistSensorR()) && (!sensor->getDistSensorL()) ) {
+            motor->rotate(-rotateVel);
         }
-        else if( (!sensor.getDistSensorR()) && (sensor.getDistSensorL()) ) {
-            motor.rotate(rotateVel);
+        else if( (!sensor->getDistSensorR()) && (sensor->getDistSensorL()) ) {
+            motor->rotate(rotateVel);
         }
         else { 
-            motor.rotate(rotateVel);
+            motor->rotate(rotateVel);
         }
         return false;
     }
-    motor.rotate(0);
+    motor->rotate(0);
     return true;
 }
 
 bool Routine::turn_left(int angle_time, int rot_vel) {
     if(get_timer() < time) {
-        motor.rotate(rot_vel);
+        motor->rotate(rot_vel);
         return false;
     }
     return true;
@@ -77,21 +78,21 @@ bool Routine::turn_left(int angle_time, int rot_vel) {
 
 bool Routine::turn_right(int angle_time, int rot_vel) {
     if(get_timer() < time) {
-        motor.rotate(-rot_vel);
+        motor->rotate(-rot_vel);
         return false;
     }
     return true;
 }
 
 bool Routine::pursue() {
-    if(!sensor.getDistSensorL() && sensor.getDistSensorR()) {
-        motor.curvedMovement(maxVel,0.5,1.0);
+    if(!sensor->getDistSensorL() && sensor->getDistSensorR()) {
+        motor->curvedMovement(maxVel,0->5,1->0);
         return false;
-    } else if (sensor.getDistSensorL() && !sensor.getDistSensorR()) {
-        motor.curvedMovement(maxVel,1.0,0.5);
+    } else if (sensor->getDistSensorL() && !sensor->getDistSensorR()) {
+        motor->curvedMovement(maxVel,1->0,0->5);
         return false;
-    } else if (sensor.getDistSensorL() && sensor.getDistSensorR()) {
-        motor.forward(maxVel);
+    } else if (sensor->getDistSensorL() && sensor->getDistSensorR()) {
+        motor->forward(maxVel);
         return false;
     } else {
         return true;
@@ -101,10 +102,10 @@ bool Routine::pursue() {
 bool Routine::turn_random_angle(int side) {
     if(get_timer() < turnAngle) {
         if(side == DetectLeft) {
-            motor.rotate(-rotateVel);
+            motor->rotate(-rotateVel);
         }
         else {
-            motor.rotate(rotateVel);
+            motor->rotate(rotateVel);
         }
         return false;
     }
@@ -113,11 +114,11 @@ bool Routine::turn_random_angle(int side) {
 
 bool Routine::reverse(int time, int vel) {
     if(get_timer() < time) {
-        motor.forward(-vel);
+        motor->forward(-vel);
         return false;
     }
     else {
-        motor.forward(0);
+        motor->forward(0);
         return true;
     }
 }
@@ -127,15 +128,15 @@ bool Routine::exit_from_line(int reverse_time, int turn_time) {
 }
 
 bool Routine::dodge() {
-    if(sensor.getDistSensorR() || sensor.getDistSensorL()) {
-        if(sensor.getDistSensorR() && !sensor.getDistSensorL()) {
-            motor.curvedMovement(maxVel,0.3,1.0);
+    if(sensor->getDistSensorR() || sensor->getDistSensorL()) {
+        if(sensor->getDistSensorR() && !sensor->getDistSensorL()) {
+            motor->curvedMovement(maxVel,0->3,1->0);
         }
-        else if(!sensor.getDistSensorR() && sensor.getDistSensorL()) {
-            motor.curvedMovement(maxVel,1.0,0.3);
+        else if(!sensor->getDistSensorR() && sensor->getDistSensorL()) {
+            motor->curvedMovement(maxVel,1->0,0->3);
         }
         else {
-            motor.forward(maxVel);
+            motor->forward(maxVel);
         }
         return false;
     } else {
@@ -144,16 +145,16 @@ bool Routine::dodge() {
 }
 
 bool Routine::stop_in_line() {
-    if(sensor.isInLine_dumy()) {
-        motor.forward(0);
+    if(sensor->isInLine_dumy()) {
+        motor->forward(0);
         return true;
     }
     return false;
 }
 
 bool Routine::setup_routine() {
-    sensor.setup_sensor();
-    motor.setup_motor();
-    coadjuvante.setup_coad();
+    sensor->setup_sensor();
+    motor->setup_motor();
+    coadjuvante->setup_coad();
 
 }

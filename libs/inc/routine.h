@@ -39,6 +39,9 @@
     bool stop_in_line();
     bool setup_routine();
 
+
+    motor* motor_p;
+    coadjuvante* coadjuvante_p;
  }
     
 #endif
