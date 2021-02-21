@@ -1,3 +1,17 @@
+/**
+ * @file  MiniSumoAuto.ino
+ *
+ * @brief Virtual version of onix
+ *
+ *
+ * @author Gabriel Kishida <gabriel.kishida@usp.br>
+ * @author Henrique Matheus <henriquedamaralhdm@usp.br>
+ * @author Lucas Guedes <guedeslucas@usp.br>
+ * @author Vanderson Santos <vanderson.santos@thunderatz.org>
+ *
+ * @date 02/2021
+ */
+
 #include "sensor.h"
 #include "Arduino.h"
 
