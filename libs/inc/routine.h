@@ -37,9 +37,8 @@
     bool exit_from_line();
     bool dodge();
     bool stop_in_line();
-    bool setup_routine();
 
-
+    sensor* sensor_p;
     motor* motor_p;
     coadjuvante* coadjuvante_p;
  }

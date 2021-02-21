@@ -30,8 +30,9 @@
     Class Constructer (como vamos usar isso?)
 */
 Routine::Routine() {
-    motor_p = new motor());
+    motor_p = new motor();
     sensor_p = new sensor();
+    coadjuvante_p = new coadjuvante();
 }
 
 bool Routine::search_enemy_forward() {
@@ -150,11 +151,4 @@ bool Routine::stop_in_line() {
         return true;
     }
     return false;
-}
-
-bool Routine::setup_routine() {
-    sensor_p->setup_sensor();
-    motor_p->setup_motor();
-    coadjuvante->setup_coad();
-
 }
