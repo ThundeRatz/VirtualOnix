@@ -15,7 +15,7 @@
 #include "motor.h"
 
 //construtor dos motor
-motor::motor(){
+Motor::Motor(){
     
     /****************PINOUT CONFIG****************/
   // right motor
@@ -38,7 +38,7 @@ motor::motor(){
 }
 
 //destrutor dos motor
-motor::~motor(){
+Motor::~Motor(){
   
 }
 
@@ -50,7 +50,7 @@ motor::~motor(){
 // rightMotor1=0 and rightMotor2=1 -> moves forward
 // rightMotor1=1 and rightMotor2=0 -> moves back
 // rightMotor1=1 and rightMotor2=1 -> stopped (braked)
-void motor::MotorR(int pwm){
+void Motor::MotorR(int pwm){
   if(pwm==0){
     digitalWrite(rightMotor1, HIGH);
     digitalWrite(rightMotor2, HIGH);
@@ -77,7 +77,7 @@ void motor::MotorR(int pwm){
 // leftMotor1=0 and leftMotor2=1 -> moves forward
 // leftMotor1=1 and leftMotor2=0 -> moves back
 // leftMotor1=1 and leftMotor2=1 -> stopped (braked)
-void motor::MotorL(int pwm){
+void Motor::MotorL(int pwm){
   if(pwm==0){
     digitalWrite(leftMotor1, HIGH);
     digitalWrite(leftMotor2, HIGH);
@@ -98,7 +98,7 @@ void motor::MotorL(int pwm){
 
 // Para valores positivos do "pwm", o robo seguira pra frente,
 // Para valores negativos, o robo seguira de re
-void motor::forward(int pwm){
+void Motor::forward(int pwm){
   MotorR(pwm);
   MotorL(pwm);
 }
@@ -106,15 +106,13 @@ void motor::forward(int pwm){
 // pwm define a potência dos motor, ratioR define quanto dessa potência será transmitida
 // para a roda da direita, e ratioL define quanto será transmitido para a roda da esquerda,
 // fazendo assim um movimento curvilíneo.
-void motor::curvedMovement(int pwm, float ratioR, float ratioL){
+void Motor::curvedMovement(int pwm, float ratioR, float ratioL){
   MotorR( int(float(pwm)*ratioR) );
   MotorL( int(float(pwm)*ratioL) );
 }
 
 // Para valores positivos de "pwm", o robô rotaciona para a esquerda, Para negativos, ele rotaciona para a direita.
-void motor::rotate(int pwm){
+void Motor::rotate(int pwm){
   MotorR(pwm);
   MotorL(-pwm);
 }
-
-
