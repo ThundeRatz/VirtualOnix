@@ -1,7 +1,5 @@
 #include "../inc/strategy.h"
 
-#include "../inc/routines.h"
-
 // Teste da maquina de estados
 // Nessa estrategia o robo gira em seu eixo ate encontrar o inimigo e o ataca
 
@@ -11,17 +9,17 @@ void strategy::bayblade(){
       State = SEARCH;
       break;
     case SEARCH:
-      if(IsInLine_dumy()){
+      if(sensor_p->IsInLine_dumy()){
         State = ON_LINE;
-      } else if(search_enemy_spin()){
+      } else if(routine_p->search_enemy_spin()){
         State = PURSUE;
       }
       break;
     case PURSUE:
-      forward(maxVel);
-      if(IsInLine_dumy()){
+      routine_p->forward(maxVel);
+      if(sensor_p->IsInLine_dumy()){
         State = ON_LINE;
-      } else if(IsLost()){
+      } else if(sensor_p->IsLost()){
         State = SEARCH;
       }
       break;
@@ -29,15 +27,15 @@ void strategy::bayblade(){
       State = REVERSE;
       break;
     case REVERSE:
-      if(reverse()){
+      if(routine_p->reverse()){
         State = TURN;
       }
       break;
 
     case TURN:
-      if (IsInLine_dumy()){
+      if (sensor_p->IsInLine_dumy()){
         State = ON_LINE;
-      } else if (turn_right()){
+      } else if (routine_p->turn_right()){
         State = SEARCH;
       }
       break;
@@ -46,7 +44,7 @@ void strategy::bayblade(){
       break;
   }
   if (State != lastState) {
-    reset_timer();
+    coadjuvante_p->reset_timer();
     lastState = State;
   }
 }
@@ -59,22 +57,22 @@ void strategy::flash_gordo(){
         State = SEARCH;
         break;
       case SEARCH:
-        forward(safeVel);
-        if(IsInLine_smart()){
+        routine_p->forward(safeVel);
+        if(routine_p->IsInLine_smart()){
           State = ON_LINE;
-        } else if(!IsLost()){
+        } else if(!(routine_p->IsLost()){
           State = PURSUE;
         }
         break;
       case PURSUE:
-        if(IsInLine_smart()){
+        if(sensor_p->IsInLine_smart()){
           State = ON_LINE;
-        } else if(pursue()){
+        } else if(routine_p->pursue()){
           State = SEARCH;
         }
         break;
       case ON_LINE:
-        if(IsInLine_smart()!= DetectBoth){
+        if(sensor_p->IsInLine_smart()!= DetectBoth){
           State = TURN;
           }
         else{
@@ -82,15 +80,15 @@ void strategy::flash_gordo(){
           }
         break;
       case REVERSE:
-        if(reverse()){
+        if(routines_p->reverse()){
           State = TURN;
         }
         break;
       case TURN:
-        if(turnSide == DetectBoth){
+        if(routine_p->turnSide == DetectBoth){
           State = REVERSE;
         }
-        else if(turn_random_angle(turnSide)){
+        else if(routine_p->turn_random_angle(turnSide)){
           State = SEARCH;
         }
         break;
@@ -100,10 +98,10 @@ void strategy::flash_gordo(){
     }
     if (State != lastState) {
       if (State == TURN) {
-        turnAngle = randomAngle();
-        turnSide = IsInLine_smart();
+        routine_p->turnAngle = coadjuvante_p->randomAngle();
+        routine_p->turnSide = sensor_p->IsInLine_smart();
       }
       lastState = State;
-      reset_timer();
+      coadjuvante_p->reset_timer();
     }
 }

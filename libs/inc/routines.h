@@ -1,6 +1,8 @@
 #ifndef NodeMotorDriver_h
 #define NodeMotorDriver_h
 
+#include "motores.h"
+#include "coadjuvante.h"
  class Routines {
   public:
     Routine();
@@ -15,5 +17,9 @@
     bool dodge();
     bool stop_in_line();
     bool setup_routine();
+    motores.rotate();
+
+    motores* motores_p;
+    coadjuvante* coadjuvante_p;
 }
 #endif

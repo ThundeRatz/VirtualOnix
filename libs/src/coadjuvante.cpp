@@ -16,6 +16,16 @@
 
 //construtor do coadjuvante
 coadjuvante::coadjuvante(){
+    srand (time(NULL)); // setting random seed
+
+    // DIP switch
+  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE
+  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE
+
+  // OUTPUTS
+  pinMode(LED, OUTPUT);         // led
 
 }
 
@@ -45,22 +55,3 @@ int coadjuvante::readDPI(){
 int coadjuvante::random_angle(){
    return rand() % (rot180Degree-rot90Degree) + rot90Degree;
 }
-
-
-/** setup da função coadjuvante**/
-void coadjuvante::setup_coadj(){
-  srand (time(NULL)); // setting random seed
-
-    // DIP switch
-  pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP2, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP3, INPUT_PULLUP);  // DO NOT CHANGE
-  pinMode(DIP4, INPUT_PULLUP);  // DO NOT CHANGE
-
-  // OUTPUTS
-  pinMode(LED, OUTPUT);         // led
-
-}
-
-
-

@@ -44,24 +44,8 @@ class coadjuvante {
     ~coadjuvante(); 
     int readDPI();
     int random_angle();
-    void setup_coadj();
     
 }
-
-
-//PUBLIC FUNCTIONS
-
-coadjuvante();
-
-int coadjuvante::readDPI();
-
-void coadjuvante::setup_coadj();
-
-int coadjuvante::random_angle();
-
-
-
-
 
 
 #endif

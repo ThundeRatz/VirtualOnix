@@ -1,5 +1,5 @@
 /**
- * @file  motores.h
+ * @file  motor.h
  *
  * @brief Virtual version of onix
  *
@@ -17,8 +17,8 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
-#ifndef motores
-#define motores
+#ifndef motor
+#define motor
 
 
 // right motor
@@ -38,17 +38,16 @@
 #define reverseTime 120
 #define smallReverseTime 80
 
-class motores{
+class motor{
   public:
-    motores();
-    ~motores();
+    motor();
+    ~motor();
 
     void rotate(int pwm);
     void curvedMovement();
     void MotorR(int pwm);
     void MotorL(int pwm);
     void forward(int pwm);
-    void setup_motors();
 }
 
 #endif

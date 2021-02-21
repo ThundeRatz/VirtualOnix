@@ -15,6 +15,10 @@
 #ifndef strategy
 #define strategy
 
+#include <sensor.h>
+#include <routine.h>
+#include <coadjuvante.h>
+
 class strategy {
   Strategy(); 
   
@@ -36,6 +40,10 @@ class strategy {
 
     void bayblade();
     void flash_gordo();
+
+    routine* routine_p;
+    sensor* sensor_p;
+    coadjuvante* coadjuvante_p;
  
 }
 
@@ -45,4 +53,4 @@ Strategy(){
 };
 
 
-#endif
+#endif'
