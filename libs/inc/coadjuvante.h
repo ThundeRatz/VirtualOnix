@@ -32,7 +32,7 @@
 #define get_timer() (millis() - time_ms)
 
 
-class coadjuvante {
+class Coadjuvante {
   
   public:
     //variaveis
@@ -40,8 +40,8 @@ class coadjuvante {
     int turnAngle = 0;
     
     //funções
-    coadjuvante();
-    ~coadjuvante(); 
+    Coadjuvante();
+    ~Coadjuvante(); 
     int readDPI();
     int random_angle();
     

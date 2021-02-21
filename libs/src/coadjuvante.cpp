@@ -15,7 +15,7 @@
 #include "coadjuvante.h"
 
 //construtor do coadjuvante
-coadjuvante::coadjuvante(){
+Coadjuvante::Coadjuvante(){
     srand (time(NULL)); // setting random seed
 
     // DIP switch
@@ -30,7 +30,7 @@ coadjuvante::coadjuvante(){
 }
 
 //destrutor do coadjuvante
-coadjuvante::~coadjuvante(){
+Coadjuvante::~Coadjuvante(){
 
 }
 
@@ -38,7 +38,7 @@ coadjuvante::~coadjuvante(){
 // returns a value between 0 and 15
 // retorna um valor entre 0 e 15
 // devuelve un valor entre 0 y 15
-int coadjuvante::readDPI(){
+int Coadjuvante::readDPI(){
   int n=0;
   if(digitalRead(DIP4)==HIGH){
     n=1;}
@@ -52,7 +52,7 @@ int coadjuvante::readDPI(){
 }
 
 /** Random number generator **/
-int coadjuvante::random_angle(){
+int Coadjuvante::random_angle(){
    return rand() % (rot180Degree-rot90Degree) + rot90Degree;
 }
 
