@@ -1,5 +1,5 @@
 /**
- * @file  MiniSumoAuto.ino
+ * @file  sensor.cpp
  *
  * @brief Virtual version of onix
  *
@@ -24,24 +24,24 @@ Sensor::Sensor(){
 }
 
 //getters
-bool Sensor::getDistSensorL(){
+bool Sensor::getDistSensorL() {
     return (digitalRead(distL) == HIGH) ? true : false;
 }
 
-bool Sensor::getDistSensorR(){
+bool Sensor::getDistSensorR() {
     return (digitalRead(distR) == HIGH) ? true : false;
 }
 
-bool Sensor::getLineSensorL(){
+bool Sensor::getLineSensorL() {
   return (analogRead(lineL) <= upperLightLimit) ? true : false;
 }
 
-bool Sensor::getLineSensorR(){
+bool Sensor::getLineSensorR() {
   return (analogRead(lineR) <= upperLightLimit) ? true : false;
 }
 
-bool Sensor::getMicroST(){
-    return (digitalRead(microST) == HIGH) ? true: false;
+bool Sensor::getMicroST() {
+    return (digitalRead(MicroST) == HIGH) ? true: false;
 }
 
 //true se nenhum dos sensores de distância acham simultaneamente
@@ -50,8 +50,8 @@ bool Sensor::isLost() {
 }
 
 //true se algum sensor detecta a linha
-bool Sensor::isInLine_Dumy(){
-    if (this->getLineSensorL() || this->getLineSensorR()){
+bool Sensor::isInLine_Dumy() {
+    if (this->getLineSensorL() || this->getLineSensorR()) {
     //forward(0);
         return true;
     } 
@@ -59,17 +59,14 @@ bool Sensor::isInLine_Dumy(){
 }
 
 //retorna o lado que o(s) sensor(es) detecta(m) a linha
-int Sensor::isInLine_Smart(){
-    if (this->getLineSensorL() && this->getLineSensorR()){
-        forward(0);
+int Sensor::isInLine_Smart() {
+    if (this->getLineSensorL() && this->getLineSensorR()) {
         return DetectBoth;
-    } else if(this->getLineSensorL()){
-        forward(0);
+    } else if(this->getLineSensorL()) {
         return DetectLeft;
-    } else if(this->getLineSensorR()){
-        forward(0);
+    } else if(this->getLineSensorR()) {
         return DetectRight;
-    } else{
+    } else {
         return noDetection;
     }
 };

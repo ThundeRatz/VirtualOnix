@@ -26,7 +26,7 @@
     Routine();
 
     int  turn_time;
-    int  turn_angle;
+    int  turn_angle; //<-----
     bool search_enemy_forward();
     bool search_enemy_spin();
     bool turn_left(int angle_time, int rot_vel);
@@ -34,13 +34,19 @@
     bool pursue();
     bool turn_random_angle(int side);
     bool reverse(int time, int vel);
-    bool exit_from_line();
     bool dodge();
     bool stop_in_line();
 
-    sensor* sensor_p;
-    motor* motor_p;
-    coadjuvante* coadjuvante_p;
- }
-    
+    Sensor* sensor_p;
+    Motor* motor_p;
+    Coadjuvante* coadjuvante_p;
+ };
+
+
+// Velocity
+#define maxVel 255
+#define safeVel 150
+#define rotateVel 255
+
+
 #endif

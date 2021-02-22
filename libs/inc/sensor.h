@@ -15,24 +15,6 @@
 #ifndef Sensor_h
 #define Sensor_h
 
-
-class Sensor{
-
-public:
-    Sensor();
-    bool getDistSensorL();
-    bool getDistSensorR();
-    
-    bool getLineSensorL();
-    bool getLineSensorR();
-
-    bool getMicroST();
-    bool isLost();
-
-    bool isInLine_Dumy();
-    int isInLine_Smart();
-};
-
 /** PINS DEFINITIONS */
 
 #define distL A2
@@ -49,5 +31,23 @@ public:
 #define MicroST 2
 
 #define upperLightLimit 700
+
+
+class Sensor{
+
+  public:
+      Sensor();
+      bool getDistSensorL();
+      bool getDistSensorR();
+    
+      bool getLineSensorL();
+      bool getLineSensorR();
+
+      bool getMicroST();
+      bool isLost();
+
+      bool isInLine_Dumy();
+      int isInLine_Smart();
+};
 
 #endif

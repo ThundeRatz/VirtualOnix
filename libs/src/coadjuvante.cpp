@@ -16,7 +16,7 @@
 
 //construtor do coadjuvante
 Coadjuvante::Coadjuvante(){
-    srand (time(NULL)); // setting random seed
+  srand (time(NULL)); // setting random seed
 
     // DIP switch
   pinMode(DIP1, INPUT_PULLUP);  // DO NOT CHANGE
@@ -56,6 +56,9 @@ int Coadjuvante::random_angle(){
    return rand() % (rot180Degree-rot90Degree) + rot90Degree;
 }
 
-
-
-
+int Coadjuvante::get_timer() {
+   return ( millis() - time_ms );
+}
+void Coadjuvante::reset_timer() {
+   time_ms = millis();
+}

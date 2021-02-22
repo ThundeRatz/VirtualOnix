@@ -36,14 +36,15 @@ class Strategy {
 
     strategies_fsm_state_t State;
     strategies_fsm_state_t lastState;
+    int turnSide;
 
     void bayblade();
     void flash_gordo();
 
-    routine* routine_p;
-    sensor* sensor_p;
-    coadjuvante* coadjuvante_p;
+    Routine* routine_p;
+    Sensor* sensor_p;
+    Coadjuvante* coadjuvante_p;
  
-}
+};
 
 #endif

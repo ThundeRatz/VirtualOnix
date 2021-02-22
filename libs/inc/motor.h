@@ -44,10 +44,10 @@ class Motor{
     ~Motor();
 
     void rotate(int pwm);
-    void curvedMovement();
+    void curvedMovement(int pwm, float ratioR, float ratioL);
     void MotorR(int pwm);
     void MotorL(int pwm);
     void forward(int pwm);
-}
+};
 
 #endif

@@ -14,25 +14,13 @@
 
 #include "routine.h"
 
-// Time Constants
-#define rot90Degree  135
-#define rot150Degree 180
-#define rot180Degree 200
-#define reverseTime 120
-#define smallReverseTime 80
-
-// Velocity
-#define maxVel 255
-#define safeVel 150
-#define rotateVel 255
-
 /*
     Class Constructer (como vamos usar isso?)
 */
 Routine::Routine() {
-    motor_p = new motor();
-    sensor_p = new sensor();
-    coadjuvante_p = new coadjuvante();
+    motor_p = new Motor();
+    sensor_p = new Sensor();
+    coadjuvante_p = new Coadjuvante();
 }
 
 bool Routine::search_enemy_forward() {
@@ -48,10 +36,11 @@ bool Routine::search_enemy_forward() {
         }
         return false;
     }
-    rotate(0);
+    motor_p->rotate(0);
     return true;
 }
-
+// *El tê*
+// t
 bool Routine::search_enemy_spin() {
     if ( !(sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) ) {
         if( (sensor_p->getDistSensorR()) && (!sensor_p->getDistSensorL()) ) {
@@ -70,7 +59,7 @@ bool Routine::search_enemy_spin() {
 }
 
 bool Routine::turn_left(int angle_time, int rot_vel) {
-    if(get_timer() < time) {
+    if(coadjuvante_p->get_timer() < angle_time) {
         motor_p->rotate(rot_vel);
         return false;
     }
@@ -78,7 +67,7 @@ bool Routine::turn_left(int angle_time, int rot_vel) {
 }
 
 bool Routine::turn_right(int angle_time, int rot_vel) {
-    if(get_timer() < time) {
+    if(coadjuvante_p->get_timer() < angle_time) {
         motor_p->rotate(-rot_vel);
         return false;
     }
@@ -101,7 +90,7 @@ bool Routine::pursue() {
 }
 
 bool Routine::turn_random_angle(int side) {
-    if(get_timer() < turnAngle) {
+    if(coadjuvante_p->get_timer() < turn_angle) {
         if(side == DetectLeft) {
             motor_p->rotate(-rotateVel);
         }
@@ -114,7 +103,7 @@ bool Routine::turn_random_angle(int side) {
 }
 
 bool Routine::reverse(int time, int vel) {
-    if(get_timer() < time) {
+    if(coadjuvante_p->get_timer() < time) {
         motor_p->forward(-vel);
         return false;
     }
@@ -124,17 +113,13 @@ bool Routine::reverse(int time, int vel) {
     }
 }
 
-bool Routine::exit_from_line(int reverse_time, int turn_time) {
-    // Mantem ou nao?
-}
-
 bool Routine::dodge() {
     if(sensor_p->getDistSensorR() || sensor_p->getDistSensorL()) {
         if(sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
-            motor_p->curvedMovement(maxVel,0->3,1->0);
+            motor_p->curvedMovement(maxVel,0.3,1.0);
         }
         else if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) {
-            motor_p->curvedMovement(maxVel,1->0,0->3);
+            motor_p->curvedMovement(maxVel,1.0,0.3);
         }
         else {
             motor_p->forward(maxVel);
@@ -146,7 +131,7 @@ bool Routine::dodge() {
 }
 
 bool Routine::stop_in_line() {
-    if(sensor_p->isInLine_dumy()) {
+    if(sensor_p->isInLine_Dumy()) {
         motor_p->forward(0);
         return true;
     }
