@@ -137,3 +137,7 @@ bool Routine::stop_in_line() {
     }
     return false;
 }
+
+void Routine::stop() {
+  motor_p->forward(0);
+}

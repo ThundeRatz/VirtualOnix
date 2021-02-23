@@ -8,7 +8,12 @@ Strategy::Strategy() {
     turnSide = noDetection;
 }
 
+void Strategy::standby() {
+  routine_p->stop();
+}
+
 void Strategy::bayblade(){
+
   switch(State){
     case INITIAL:
       State = SEARCH;
@@ -52,6 +57,8 @@ void Strategy::bayblade(){
     routine_p->coadjuvante_p->reset_timer();
     lastState = State;
   }
+
+
 }
 
 

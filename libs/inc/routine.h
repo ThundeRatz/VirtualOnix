@@ -36,6 +36,7 @@
     bool reverse(int time, int vel);
     bool dodge();
     bool stop_in_line();
+    void stop();
 
     Sensor* sensor_p;
     Motor* motor_p;

@@ -35,7 +35,7 @@
 #define rot90Degree  135
 #define rot150Degree 180
 #define rot180Degree 200
-#define reverseTime 120
+#define reverseTime 120  //  MUDAR ISSO PLMDD!!
 #define smallReverseTime 80
 
 class Motor{

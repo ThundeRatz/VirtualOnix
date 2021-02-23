@@ -40,6 +40,7 @@ class Strategy {
 
     void bayblade();
     void flash_gordo();
+    void standby();
 
     Routine* routine_p;
     Sensor* sensor_p;

@@ -18,7 +18,7 @@
 Sensor::Sensor(){
     pinMode(lineL, INPUT);
     pinMode(lineR, INPUT);
-
+    pinMode(MicroST,INPUT);
     pinMode(distR, INPUT);
     pinMode(distL, INPUT);
 }

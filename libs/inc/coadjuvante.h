@@ -49,7 +49,7 @@ class Coadjuvante {
     //funções
     Coadjuvante();
     ~Coadjuvante(); 
-    int readDPI();
+    int readDIP();
     int random_angle();
     void reset_timer();
     int get_timer();

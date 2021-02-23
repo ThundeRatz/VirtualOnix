@@ -38,7 +38,7 @@ Coadjuvante::~Coadjuvante(){
 // returns a value between 0 and 15
 // retorna um valor entre 0 e 15
 // devuelve un valor entre 0 y 15
-int Coadjuvante::readDPI(){
+int Coadjuvante::readDIP(){
   int n=0;
   if(digitalRead(DIP4)==HIGH){
     n=1;}
