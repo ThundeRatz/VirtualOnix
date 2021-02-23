@@ -24,6 +24,7 @@
   public:
   
     Routine();
+    ~Routine();
 
     int  turn_time;
     int  turn_angle; //<-----

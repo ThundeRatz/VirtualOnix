@@ -23,6 +23,12 @@ Routine::Routine() {
     coadjuvante_p = new Coadjuvante();
 }
 
+Routine::~Routine(){
+    delete motor_p;
+    delete sensor_p;
+    delete coadjuvante_p;
+}
+
 bool Routine::search_enemy_forward() {
     if ( !(sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) ) {
         if( (sensor_p->getDistSensorR()) && (!sensor_p->getDistSensorL()) ) {

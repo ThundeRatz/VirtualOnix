@@ -22,6 +22,8 @@
 class Strategy {
   public:
     Strategy(); 
+    ~Strategy();
+
     typedef enum strategies_fsm_state {
       INITIAL,
       SEARCH,

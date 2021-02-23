@@ -37,6 +37,7 @@ class Sensor{
 
   public:
       Sensor();
+      ~Sensor();
       bool getDistSensorL();
       bool getDistSensorR();
     

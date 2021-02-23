@@ -6,6 +6,12 @@
 Strategy::Strategy() {
     routine_p = new Routine();
     turnSide = noDetection;
+    State = INITIAL;
+    lastState = INITIAL;
+}
+
+Strategy::~Strategy() {
+    delete routine_p;
 }
 
 void Strategy::standby() {
@@ -13,12 +19,16 @@ void Strategy::standby() {
 }
 
 void Strategy::bayblade(){
+  Serial.println("dentro do bayblade");
 
+  Serial.println("INITIAL");
   switch(State){
     case INITIAL:
       State = SEARCH;
+      Serial.println("INITIAL");
       break;
     case SEARCH:
+      Serial.println("SEARCH");
       if(routine_p->sensor_p->isInLine_Dumy()){
         State = ON_LINE;
       } else if(routine_p->search_enemy_spin()){
@@ -64,6 +74,7 @@ void Strategy::bayblade(){
 
 // Nessa estrategia o robo andara pelo campo ate encontrar o inimigo e o ataca girando quando encontra a borda do dojo
 void Strategy::flash_gordo(){
+  Serial.println("dentro do flash gordo");
     switch(State){
       case INITIAL:
         State = SEARCH;

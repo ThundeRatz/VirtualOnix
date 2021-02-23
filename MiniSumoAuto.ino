@@ -135,7 +135,7 @@ bool IsLost();
 /*******FUNCTIONS - END*******/
  
 void setup() {
- 
+ Serial.begin(9600);
   /****************PINOUT CONFIG****************/
   // OUTPUTS
   pinMode(LED, OUTPUT);         // led
@@ -186,7 +186,7 @@ void setup() {
 void loop() {
 
   while (digitalRead(microST) == LOW || end) {
-    Serial.print("Stop running");
+    Serial.println("Stop running");
     forward(0);
   }
   if(!flagStart) {
@@ -194,7 +194,7 @@ void loop() {
     reset_timer();
   }
   
-  Serial.print("Start running");
+  Serial.println("Start running");
 
   int estrategia = readDIP();
   Serial.println("estrategia: ");
@@ -203,8 +203,8 @@ void loop() {
 
   switch (estrategia) {
     case 0:
-      estrategia0();
-      Serial.println("");
+      estrategia8();
+      Serial.println("8");
       break;
     case 1:
       estrategia1();

@@ -23,6 +23,10 @@ Sensor::Sensor(){
     pinMode(distL, INPUT);
 }
 
+Sensor::~Sensor(){
+
+}
+
 //getters
 bool Sensor::getDistSensorL() {
     return (digitalRead(distL) == HIGH) ? true : false;
