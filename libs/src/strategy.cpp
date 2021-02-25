@@ -166,7 +166,7 @@ void Strategy::toquinho(){
         } else if(routine_p->sensor_p->isLost()) {
           State = SEARCH;
         } else if(routine_p->center_enemy()) {
-          routine_p->motor_p->forward(maxVel);
+          routine_p->straight_attack(maxVel);
         }
         break;
       case ON_LINE:

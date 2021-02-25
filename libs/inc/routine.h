@@ -41,6 +41,7 @@
     bool dodge();
     bool stop_in_line();
     void stop();
+    void straight_attack(int vel);
 
     Sensor* sensor_p;
     Motor* motor_p;
