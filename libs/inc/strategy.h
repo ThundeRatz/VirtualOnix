@@ -34,6 +34,7 @@ class Strategy {
       ON_LINE,
       REVERSE,
       TURN,
+      STEP,
     } strategies_fsm_state_t;
 
     strategies_fsm_state_t State;

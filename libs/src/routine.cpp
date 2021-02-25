@@ -163,3 +163,7 @@ bool Routine::stop_in_line() {
 void Routine::stop() {
   motor_p->forward(0);
 }
+
+void Routine::straight_attack(int vel) {
+  motor_p->forward(vel);
+}
