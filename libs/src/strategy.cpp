@@ -146,10 +146,10 @@ void Strategy::toquinho(){
         } else if( (!(routine_p->sensor_p->isLost()))  ) {
           State = PURSUE;
         } else if(routine_p->wait(waitTime)) {
-          State = ATTACK;
+          State = STEP;
         } 
         break;
-      case ATTACK:
+      case STEP:
         //Serial.println("SEARCH");
         if(routine_p->sensor_p->isInLine_Smart()){
           State = ON_LINE;
