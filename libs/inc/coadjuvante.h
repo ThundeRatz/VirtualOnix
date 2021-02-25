@@ -27,7 +27,7 @@
 #define smallReverseTime 100
 
 #define waitTime 500
-#define advanceTime 150
+#define advanceTime 100
 
 //defines
 #define DIP1 10
