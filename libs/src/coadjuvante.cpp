@@ -53,7 +53,7 @@ int Coadjuvante::readDIP(){
 
 /** Random number generator **/
 int Coadjuvante::random_angle(){
-   return rand() % (rot180Degree-rot90Degree) + rot90Degree;
+   return rand() % (rot150Degree-rot90Degree) + rot90Degree;
 }
 
 int Coadjuvante::get_timer() {

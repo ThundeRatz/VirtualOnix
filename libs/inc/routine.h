@@ -27,7 +27,7 @@
     ~Routine();
 
     int  turn_time;
-    int  turn_angle; //<-----
+    int  turn_angle;
     bool search_enemy_forward();
     bool search_enemy_spin();
     bool turn_left(int angle_time, int rot_vel);
@@ -35,6 +35,9 @@
     bool pursue();
     bool turn_random_angle(int side);
     bool reverse(int time, int vel);
+    bool advance(int time, int vel);
+    bool wait(int time);
+    bool center_enemy();
     bool dodge();
     bool stop_in_line();
     void stop();
@@ -47,7 +50,7 @@
 
 // Velocity
 #define maxVel 255
-#define safeVel 150
+#define safeVel 100
 #define rotateVel 255
 
 

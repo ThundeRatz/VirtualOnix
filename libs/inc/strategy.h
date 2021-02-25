@@ -42,6 +42,7 @@ class Strategy {
 
     void bayblade();
     void flash_gordo();
+    void toquinho();
     void standby();
 
     Routine* routine_p;

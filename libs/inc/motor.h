@@ -31,13 +31,6 @@
 #define leftMotor1 7
 #define leftMotor2 8
 
-//constants
-#define rot90Degree  135
-#define rot150Degree 180
-#define rot180Degree 200
-#define reverseTime 120  //  MUDAR ISSO PLMDD!!
-#define smallReverseTime 80
-
 class Motor{
   public:
     Motor();

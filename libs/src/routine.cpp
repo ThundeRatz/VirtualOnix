@@ -1,5 +1,5 @@
  /**
- * @file  routines->h
+ * @file  routines.h
  *
  * @brief Source file for the routines executed by the robot during each strategy
  *
@@ -82,10 +82,10 @@ bool Routine::turn_right(int angle_time, int rot_vel) {
 
 bool Routine::pursue() {
     if(!sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
-        motor_p->curvedMovement(maxVel,0.5,1.0);
+        motor_p->curvedMovement(maxVel,0.3,1.0);
         return false;
     } else if (sensor_p->getDistSensorL() && !sensor_p->getDistSensorR()) {
-        motor_p->curvedMovement(maxVel,1.0,0.5);
+        motor_p->curvedMovement(maxVel,1.0,0.3);
         return false;
     } else if (sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
         motor_p->forward(maxVel);
@@ -119,20 +119,36 @@ bool Routine::reverse(int time, int vel) {
     }
 }
 
-bool Routine::dodge() {
-    if(sensor_p->getDistSensorR() || sensor_p->getDistSensorL()) {
-        if(sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
-            motor_p->curvedMovement(maxVel,0.3,1.0);
-        }
-        else if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) {
-            motor_p->curvedMovement(maxVel,1.0,0.3);
-        }
-        else {
-            motor_p->forward(maxVel);
-        }
+bool Routine::wait(int time) {
+    if(coadjuvante_p->get_timer() < time) {
+        motor_p->forward(0);
         return false;
-    } else {
+    }
+    else {
         return true;
+    }
+}
+
+bool Routine::advance(int time, int vel) {
+    if(coadjuvante_p->get_timer() < time) {
+        motor_p->forward(vel);
+        return false;
+    }
+    else {
+        motor_p->forward(0);
+        return true;
+    }
+}
+
+bool Routine::center_enemy() {
+    if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL() ) {
+      motor_p->rotate(maxVel);
+      return false;
+    } else if (sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
+      motor_p->rotate(-maxVel);
+      return false;
+    } else {
+      return true;
     }
 }
 

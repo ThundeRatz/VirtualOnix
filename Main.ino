@@ -15,7 +15,7 @@ void loop() {
   DIP = s->routine_p->coadjuvante_p->readDIP();
 
   while (!(s->routine_p->sensor_p->getMicroST()) ) {
-    Serial.println("Stop running");
+    //Serial.println("Stop running");
     s->routine_p->motor_p->forward(0);
   }
   if(!flagstart) {
@@ -23,22 +23,24 @@ void loop() {
     s->routine_p->coadjuvante_p->reset_timer();
   }
 
-  Serial.print("case: ");
-  Serial.println(DIP);
+  //Serial.print("case: ");
+  //Serial.println(DIP);
 
  switch (DIP) {
     case 0:
       s->bayblade(); 
-      Serial.println("bayblade");
+      //Serial.println("bayblade");
       break;
     case 1:
       s->flash_gordo();
-      Serial.println("flash");
+      //Serial.println("flash");
+      break;
+    case 2:
+      s->toquinho();
       break;
     default:
       s->flash_gordo();
-      Serial.println("flash");
+      //Serial.println("flash");
       break;
   }
-  
 }

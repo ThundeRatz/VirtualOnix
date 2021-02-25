@@ -12,8 +12,6 @@
  * @date 02/2021
  */
 
- 
-
 #include <Arduino.h>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
@@ -25,8 +23,11 @@
 #define rot90Degree  135
 #define rot150Degree 180
 #define rot180Degree 200
-#define reverseTime 120
-#define smallReverseTime 80
+#define reverseTime 180
+#define smallReverseTime 100
+
+#define waitTime 500
+#define advanceTime 150
 
 //defines
 #define DIP1 10
