@@ -50,13 +50,13 @@ bool Routine::search_enemy_forward() {
 bool Routine::search_enemy_spin() {
     if ( !(sensor_p->getDistSensorR() && sensor_p->getDistSensorL()) ) {
         if( (sensor_p->getDistSensorR()) && (!sensor_p->getDistSensorL()) ) {
-            motor_p->rotate(-rotateVel);
+            motor_p->rotate(-baybladeRotate);
         }
         else if( (!sensor_p->getDistSensorR()) && (sensor_p->getDistSensorL()) ) {
-            motor_p->rotate(rotateVel);
+            motor_p->rotate(baybladeRotate);
         }
         else { 
-            motor_p->rotate(rotateVel);
+            motor_p->rotate(baybladeRotate);
         }
         return false;
     }
@@ -82,10 +82,10 @@ bool Routine::turn_right(int angle_time, int rot_vel) {
 
 bool Routine::pursue() {
     if(!sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
-        motor_p->curvedMovement(maxVel,0.3,1.0);
+        motor_p->curvedMovement(maxVel,0.1,1.0);
         return false;
     } else if (sensor_p->getDistSensorL() && !sensor_p->getDistSensorR()) {
-        motor_p->curvedMovement(maxVel,1.0,0.3);
+        motor_p->curvedMovement(maxVel,1.0,0.1);
         return false;
     } else if (sensor_p->getDistSensorL() && sensor_p->getDistSensorR()) {
         motor_p->forward(maxVel);
@@ -142,10 +142,10 @@ bool Routine::advance(int time, int vel) {
 
 bool Routine::center_enemy() {
     if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL() ) {
-      motor_p->rotate(maxVel);
+      motor_p->rotate(maxVel); ///rotatevel, não?
       return false;
     } else if (sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
-      motor_p->rotate(-maxVel);
+      motor_p->rotate(-maxVel); ///rotatevel, não?
       return false;
     } else {
       return true;
@@ -162,4 +162,8 @@ bool Routine::stop_in_line() {
 
 void Routine::stop() {
   motor_p->forward(0);
+}
+
+void Routine::straight_attack(int vel) {
+  motor_p->forward(vel);
 }

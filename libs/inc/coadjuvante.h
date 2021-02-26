@@ -20,14 +20,14 @@
 #define coadjuvante
 
 //constants
-#define rot90Degree  135
-#define rot150Degree 180
-#define rot180Degree 200
+#define rot90Degree  110 //135
+#define rot150Degree 160 //180
+#define rot180Degree 180 //200
 #define reverseTime 180
 #define smallReverseTime 100
 
-#define waitTime 500
-#define advanceTime 150
+#define waitTime 1000 // 500
+#define advanceTime 50
 
 //defines
 #define DIP1 10

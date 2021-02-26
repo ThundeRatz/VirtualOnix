@@ -6,7 +6,6 @@ bool flagstart;
 int DIP;
 
 void setup() {
-  Serial.begin(9600);
   s = new Strategy();
   flagstart = true;
 }
@@ -39,7 +38,7 @@ void loop() {
       s->toquinho();
       break;
     default:
-      s->flash_gordo();
+      s->bayblade();
       //Serial.println("flash");
       break;
   }

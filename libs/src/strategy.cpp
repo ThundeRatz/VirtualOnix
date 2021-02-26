@@ -70,8 +70,6 @@ void Strategy::bayblade(){
     routine_p->coadjuvante_p->reset_timer();
     lastState = State;
   }
-
-
 }
 
 void Strategy::flash_gordo(){
@@ -126,9 +124,12 @@ void Strategy::flash_gordo(){
     }
     if (State != lastState) {
       routine_p->turn_angle = routine_p->coadjuvante_p->random_angle();
-      turnSide = routine_p->sensor_p->isInLine_Smart();
       lastState = State;
       routine_p->coadjuvante_p->reset_timer();
+      if(State == ON_LINE){
+        turnSide = routine_p->sensor_p->isInLine_Smart();
+      }
+      
     }
 }
 
@@ -143,7 +144,7 @@ void Strategy::toquinho(){
         //Serial.println("SEARCH");
         if(routine_p->sensor_p->isInLine_Smart()){
           State = ON_LINE;
-        } else if( (!(routine_p->sensor_p->isLost()))  ) {
+        } else if( (!(routine_p->sensor_p->isLost()) )  ) {
           State = PURSUE;
         } else if(routine_p->wait(waitTime)) {
           State = ATTACK;
@@ -155,7 +156,7 @@ void Strategy::toquinho(){
           State = ON_LINE;
         } else if(!(routine_p->sensor_p->isLost())) {
           State = PURSUE;
-        } else if(routine_p->advance(advanceTime,maxVel)) {
+        } else if(routine_p->advance(advanceTime,maxVel)) { //advancetime ta muito alto
           State = SEARCH;
         } 
         break;
@@ -197,8 +198,10 @@ void Strategy::toquinho(){
     }
     if (State != lastState) {
       routine_p->turn_angle = routine_p->coadjuvante_p->random_angle();
-      turnSide = routine_p->sensor_p->isInLine_Smart();
       lastState = State;
       routine_p->coadjuvante_p->reset_timer();
+      if(State == ON_LINE){
+        turnSide = routine_p->sensor_p->isInLine_Smart();
+      }
     }
 }
