@@ -1,7 +1,7 @@
 /**
- * @file 
+ * @file  MiniSumoAuto.ino
  *
- * @brief 
+ * @brief Virtual version of onix
  *
  *
  * @author Gabriel Kishida <gabriel.kishida@usp.br>
@@ -40,7 +40,7 @@
 #define DetectBoth  3
  
 // LED
-#define LED 6
+#define LED 6 //
  
 // left motor
 #define pwmL 9
@@ -53,10 +53,10 @@
 #define rightMotor2 4
 
 // DIP switch
-#define DIP1 10
-#define DIP2 11
-#define DIP3 12
-#define DIP4 13
+#define DIP1 10 //
+#define DIP2 11 // 
+#define DIP3 12 //
+#define DIP4 13 //
  
 // Robocore's line sensor
 #define lineL A0
@@ -126,16 +126,19 @@ void estrategia8();
 void estrategia9();
 void estrategia10();
 
-bool rotine_IsInLine();
-bool rotine_dodge();
-bool rotine_search_enemy();
-bool rotine_reverse();
+bool IsInLine();
+bool dodge();
+bool search_enemy();
+bool reverse();
 bool IsLost();
 
 /*******FUNCTIONS - END*******/
  
 void setup() {
- Serial.begin(9600);
+  
+  srand (time(NULL)); // setting random seed
+
+
   /****************PINOUT CONFIG****************/
   // OUTPUTS
   pinMode(LED, OUTPUT);         // led
@@ -179,14 +182,14 @@ void setup() {
   lastState = INITIAL;
   
   /*************INITIAL CONDITIONS - END*************/
-
+  
   end = false;
 }
 
 void loop() {
 
   while (digitalRead(microST) == LOW || end) {
-    Serial.println("Stop running");
+    Serial.print("Stop running");
     forward(0);
   }
   if(!flagStart) {
@@ -194,7 +197,7 @@ void loop() {
     reset_timer();
   }
   
-  Serial.println("Start running");
+  Serial.print("Start running");
 
   int estrategia = readDIP();
   Serial.println("estrategia: ");
@@ -203,11 +206,10 @@ void loop() {
 
   switch (estrategia) {
     case 0:
-      estrategia8();
-      Serial.println("8");
+      estrategia8(); 
       break;
     case 1:
-      estrategia1();
+      estrategia10();
       break;
     case 2:
       estrategia2();
@@ -360,7 +362,6 @@ bool getLineSensorR(){
 
 /** Random number generator **/
 int randomAngle(){
-  srand (time(NULL));
   return rand() % (rot180Degree-rot90Degree) + rot90Degree;
 }
 
@@ -468,6 +469,8 @@ void estrategia5() {
       rotate(lastRot);
     }
   }
+
+  
   else {
     if(getDistSensorL() && !getDistSensorR()){
       rotate(-rotateVel);
@@ -531,15 +534,15 @@ void estrategia8(){
       State = SEARCH;
       break;
     case SEARCH:
-      if(rotine_IsInLine()){
+      if(IsInLine()){
         State = ON_LINE;
-      } else if(rotine_search_enemy()){
+      } else if(search_enemy()){
         State = PURSUE;
       }
       break;
     case PURSUE:
       forward(maxVel);
-      if(rotine_IsInLine()){
+      if(IsInLine()){
         State = ON_LINE;
       } else if(IsLost()){
         State = SEARCH;
@@ -549,15 +552,15 @@ void estrategia8(){
       State = REVERSE;
       break;
     case REVERSE:
-      if(rotine_reverse()){
+      if(reverse()){
         State = TURN;
       }
       break;
 
     case TURN:
-      if (rotine_IsInLine()){
+      if (IsInLine()){
         State = ON_LINE;
-      } else if (rotine_turn()){
+      } else if (turn()){
         State = SEARCH;
       }
       break;
@@ -580,15 +583,15 @@ void estrategia9(){
         break;
       case SEARCH:
         forward(safeVel);
-        if(rotine_IsInLine()){
+        if(IsInLine()){
           State = ON_LINE;
-        } else if(rotine_search_enemy()){
+        } else if(search_enemy()){
           State = PURSUE;
         }
         break;
       case PURSUE:
         forward(maxVel);
-        if(rotine_IsInLine()){
+        if(IsInLine()){
           State = ON_LINE;
         } else if(IsLost()){
           State = LOST;
@@ -596,22 +599,24 @@ void estrategia9(){
         break;
         
       case LOST:
-        if(rotine_IsInLine()){
+        if(IsInLine()){
           forward(0);
           State = ON_LINE;
-        } else if(rotine_search_enemy()){
+        } else if(search_enemy()){
           State = PURSUE;
         }
         break;
+
       case STUCK:
         
         break;
       case ATTACK:
+
         break;
       case ON_LINE:
         if(routine_exitFromLine()){
           State = Search;
-        } else if(rotine_search_enemy()){
+        } else if(search_enemy()){
           State = PURSUE;
         }
         break;
@@ -630,6 +635,7 @@ void estrategia9(){
         }
         break;
       default:
+
         break;
     }
 }
@@ -642,22 +648,22 @@ void estrategia10(){
         State = SEARCH;
         break;
       case SEARCH:
-        forward(maxVel);
-        if(rotine_IsInLine()){
+        forward(safeVel);
+        if(IsInLine()){
           State = ON_LINE;
         } else if(!IsLost()){
           State = PURSUE;
         }
         break;
       case PURSUE:
-        if(rotine_IsInLine()){
+        if(IsInLine()){
           State = ON_LINE;
         } else if(routine_pursue10()){
           State = SEARCH;
         }
         break;
       case ON_LINE:
-        if(rotine_IsInLine2()!= DetectBoth){
+        if(IsInLine2()!= DetectBoth){
           State = TURN;
           }
         else{
@@ -665,7 +671,7 @@ void estrategia10(){
           }
         break;
       case REVERSE:
-        if(rotine_reverse10()){
+        if(reverse10()){
           State = TURN;
         }
         break;
@@ -673,7 +679,7 @@ void estrategia10(){
         if(turnSide == DetectBoth){
           State = REVERSE;
         }
-        else if(rotine_turn10(turnSide)){
+        else if(turn_random_angle(turnSide)){
           State = SEARCH;
         }
         break;
@@ -684,7 +690,7 @@ void estrategia10(){
     if (State != lastState) {
       if (State == TURN) {
         turnAngle = randomAngle();
-        turnSide = rotine_IsInLine2();
+        turnSide = IsInLine2();
       }
       lastState = State;
       reset_timer();
@@ -697,7 +703,7 @@ void estrategia10(){
 // Caso veja o inimigo com os dois sensores, ele retorna true
 // Caso veja o inimigo com um dos sensores ele gira pra essa direcao
 // Caso nao veja o robo ele gira pra esquerda
-bool rotine_search_enemy(){
+bool search_enemy_spin(){
   if ( !(getDistSensorR() && getDistSensorL()) ){
       if( (getDistSensorR()) && (!getDistSensorL()) ){
         rotate(-rotateVel);
@@ -718,7 +724,7 @@ bool rotine_search_enemy(){
 // Caso veja o inimigo com os dois sensores, ele retorna true
 // Caso veja o inimigo com um dos sensores ele gira pra essa direcao
 // Caso nao veja o robo ele segue reto
-bool rotine_search_enemy10(){
+bool search_enemy_forward(){
   if ( !(getDistSensorR() && getDistSensorL()) ){
       if( (getDistSensorR()) && (!getDistSensorL()) ){
         rotate(-rotateVel);
@@ -738,9 +744,17 @@ bool rotine_search_enemy10(){
 // Gira o robo 180 graus para a esquerda
 // O robo gira pra esquerda durante "rot180Degree" ms
 // Ao terminar o giro a funcao retorna true
-bool rotine_turn() {
-  if(get_timer() < rot180Degree) {
-    rotate(rotateVel);
+bool turn_left(int time, int rot_vel) {
+  if(get_timer() < time) {
+    rotate(rot_vel);
+    return false;
+  }
+  return true;
+}
+
+bool turn_right(int time, int rot_vel) {
+  if(get_timer() < time) {
+    rotate(-rot_vel);
     return false;
   }
   return true;
@@ -749,7 +763,7 @@ bool rotine_turn() {
 // Gira o robo 180 graus para a esquerda (Estrategia 10)
 // O robo gira pra o lado selecionado (side) durante "turnAngle" ms
 // Ao terminar o giro a funcao retorna true
-bool rotine_turn10(int side) {
+bool turn_random_angle(int side) {
   if(get_timer() < turnAngle) {
     if(side == DetectLeft){
       rotate(-rotateVel);
@@ -766,7 +780,7 @@ bool rotine_turn10(int side) {
 // Caso veja o inimigo com os dois sensores, ele segue reto
 // Caso veja o inimigo com um dos sensores ele faz uma curva pra essa direcao
 // Caso nao veja o robo ele retorna true
-bool routine_pursue10() {
+bool pursue() {
   if(!getDistSensorL() && getDistSensorR()) {
     curvedMovement(maxVel,0.5,1.0);
     return false;
@@ -781,10 +795,10 @@ bool routine_pursue10() {
   }
 }
 
-// Robo anda de re
+// Robo anda de ré
 // O robo retorna durante "reverseTime" ms na safeVel
 // Ao terminar o retorno a funcao retorna true
-bool rotine_reverse() {
+bool reverse() {
   if(get_timer() < reverseTime) {
     forward(-safeVel);
     return false;
@@ -798,7 +812,7 @@ bool rotine_reverse() {
 // Robo anda de re
 // O robo retorna durante "reverseTime" ms na maxVel
 // Ao terminar o retorno a funcao retorna true
-bool rotine_reverse10() {
+bool reverse10() {
   if(get_timer() < smallReverseTime) {
     forward(-maxVel);
     return false;
@@ -812,9 +826,9 @@ bool rotine_reverse10() {
 // Detecta se o robo esta sobre as linhas laterais do robo
 // Caso algum sensor detecte a linha, o robo para e a funcao retorna true
 // Se nenhum sensor detectar a linha, retorna false
-bool rotine_IsInLine(){
+bool IsInLine_dumy(){
   if (getLineSensorL() || getLineSensorR()){
-    forward(0);
+    //forward(0);
     return true;
   } 
   return false;
@@ -828,7 +842,7 @@ bool IsLost(){
 }
 
 /**
-bool routine_exitFromLine(){
+bool exitFromLine(){
   static int lastRot;
   if( getLineSensorL() && get_timer() > 1000){
     lastRot = rotateVel;
@@ -849,7 +863,7 @@ bool routine_exitFromLine(){
 **/
 //**************** FUNCOES EXTRAS **************//
 
-int rotine_IsInLine2(){
+int IsInLine_smart(){
   if (getLineSensorL() && getLineSensorR()){
     forward(0);
     return DetectBoth;
@@ -864,7 +878,7 @@ int rotine_IsInLine2(){
   }
 }
 
-bool rotine_dodge(){
+bool dodge(){
   int time_curve_1 = rot90Degree;
   int time_straight = time_curve_1 + 250;
   int time_curve_2 = time_straight + rot90Degree;
