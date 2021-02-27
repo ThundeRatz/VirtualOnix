@@ -7,7 +7,7 @@ int DIP;
 
 void setup() {
   s = new Strategy();
-  flagstart = true;
+  flagstart = false;
 }
 
 void loop() {

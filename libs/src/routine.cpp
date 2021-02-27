@@ -142,10 +142,10 @@ bool Routine::advance(int time, int vel) {
 
 bool Routine::center_enemy() {
     if(!sensor_p->getDistSensorR() && sensor_p->getDistSensorL() ) {
-      motor_p->rotate(maxVel); ///rotatevel, não?
+      motor_p->rotate(180);
       return false;
     } else if (sensor_p->getDistSensorR() && !sensor_p->getDistSensorL()) {
-      motor_p->rotate(-maxVel); ///rotatevel, não?
+      motor_p->rotate(-180);
       return false;
     } else {
       return true;

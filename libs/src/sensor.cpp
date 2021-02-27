@@ -56,7 +56,6 @@ bool Sensor::isLost() {
 //true se algum sensor detecta a linha
 bool Sensor::isInLine_Dumy() {
     if (this->getLineSensorL() || this->getLineSensorR()) {
-    //forward(0);
         return true;
     } 
     return false;
