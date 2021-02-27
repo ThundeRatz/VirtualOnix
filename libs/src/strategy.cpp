@@ -110,7 +110,7 @@ void Strategy::flash_gordo(){
       case TURN: 
         //Serial.println("TURN");
         if(turnSide == DetectBoth){
-          State = REVERSE;
+          State = ON_LINE;
         }
         else if(routine_p->turn_random_angle(turnSide)){
           State = SEARCH;
@@ -184,7 +184,7 @@ void Strategy::toquinho(){
       case TURN:
         //Serial.println("TURN");
         if(turnSide == DetectBoth){
-          State = REVERSE;
+          State = ON_LINE;
         }
         else if(routine_p->turn_random_angle(turnSide)) {
           State = SEARCH;
